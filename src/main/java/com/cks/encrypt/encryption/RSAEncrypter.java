@@ -103,6 +103,10 @@ public class RSAEncrypter {
         try {
             Key key = extractKey(keyFile, keyType);
 
+            Cipher cipher = Cipher.getInstance(RSA);
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            return cipher.doFinal(cipherBytes);
+
         } catch (IOException x) {
             LOGGER.severe("Could not read from key file.");
             LOGGER.fine(x.getMessage());
