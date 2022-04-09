@@ -6,6 +6,7 @@
 package com.cks.encrypt.encryption;
 
 import com.cks.encrypt.encryption.RSAEncrypter.KeyType;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
@@ -40,4 +41,15 @@ public class RSAEncrypterTest {
         assertNotEquals(cipherBytes, plainBytes);
     }
     
+    @Test
+    public void testDecrypt_Simple1() throws GeneralSecurityException {
+        Path keyFile = Paths.get("public.txt");
+        RSAEncrypter encrypter = new RSAEncrypter();
+        String msg = "This is a test message";
+        byte[] plainBytes = msg.getBytes(Charset.defaultCharset());
+        byte[] cipherBytes = encrypter.encrypt(plainBytes, keyFile, KeyType.PUBLIC);
+
+        byte[] decryptBytes = encrypter.decrypt(cipherBytes, Paths.get("private.txt"), KeyType.PRIVATE);
+        assertEquals(new String(plainBytes), new String(decryptBytes));
+    }
 }
