@@ -66,15 +66,9 @@ public class RSAEncrypter {
         return publicKey.getEncoded();
     }
 
-    public byte[] encrypt(byte[] plainBytes, Path keyfile, KeyType keyType) throws GeneralSecurityException {
+    public byte[] encrypt(byte[] plainBytes, Path keyFile, KeyType keyType) throws GeneralSecurityException {
         try {
-            byte[] keyBytes = FileIO.read(keyfile);
-            byte[] decodedKeyBytes = Base64.getDecoder().decode(keyBytes);
-            
-            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-            EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKeyBytes);
-            Key key = keyType == KeyType.PUBLIC ? keyFactory.generatePublic(keySpec) : keyFactory.generatePrivate(keySpec);
-            
+            Key key = extractKey(keyFile, keyType);
             Cipher cipher = Cipher.getInstance(RSA);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return cipher.doFinal(plainBytes);
@@ -86,8 +80,26 @@ public class RSAEncrypter {
         }
     }
 
-    public byte[] decrypt(byte[] cipherBytes, Path keyfile, KeyType keyType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Key extractKey(Path keyFile, KeyType keyType) throws IOException, GeneralSecurityException {
+
+        byte[] keyBytes = FileIO.read(keyFile);
+        byte[] decodedKeyBytes = Base64.getDecoder().decode(keyBytes);
+
+        KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+        EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKeyBytes);
+        Key key = keyType == KeyType.PUBLIC ? keyFactory.generatePublic(keySpec) : keyFactory.generatePrivate(keySpec);
+
+        return key;
     }
-    
+
+    public byte[] decrypt(byte[] cipherBytes, Path keyFile, KeyType keyType) throws GeneralSecurityException {
+        try {
+            Key key = extractKey(keyFile, keyType);
+
+        } catch (IOException x) {
+            LOGGER.severe("Could not read from key file.");
+            LOGGER.fine(x.getMessage());
+            throw new GeneralSecurityException("Could not read from key file.");
+        }
+    }
 }
