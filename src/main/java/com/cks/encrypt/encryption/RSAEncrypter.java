@@ -18,6 +18,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.logging.Logger;
@@ -86,8 +87,14 @@ public class RSAEncrypter {
         byte[] decodedKeyBytes = Base64.getDecoder().decode(keyBytes);
 
         KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-        EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKeyBytes);
-        Key key = keyType == KeyType.PUBLIC ? keyFactory.generatePublic(keySpec) : keyFactory.generatePrivate(keySpec);
+        Key key = null;
+        if (keyType == KeyType.PUBLIC) {
+            EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKeyBytes);
+            key = keyFactory.generatePublic(keySpec);
+        } else {
+            EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKeyBytes);
+            key = keyFactory.generatePrivate(keySpec);
+        }
 
         return key;
     }
