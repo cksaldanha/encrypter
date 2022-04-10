@@ -43,6 +43,13 @@ public class AESEncrypter {
         keySpec = keyGen.generateKey();
     }
 
+    public void generateIv() throws GeneralSecurityException {
+        SecureRandom secRand = new SecureRandom();
+        byte[] iv = new byte[16];
+        secRand.nextBytes(iv);
+        ivSpec = new IvParameterSpec(iv);
+    }
+
     public void loadKey(Path aesKeyFile, Path rsaKeyFile, KeyType rsaKeyType) throws IOException, GeneralSecurityException {
         RSAEncrypter rsa = new RSAEncrypter();
         Decoder decoder = Base64.getDecoder();
