@@ -77,7 +77,7 @@ public class AESEncrypter {
         byte[] data = new byte[ivSpec.getIV().length + keySpec.getEncoded().length];
         ArraysHelper.copyBytes(data, 0, iv, 0, iv.length);
         ArraysHelper.copyBytes(data, iv.length, keyBytes, 0, keyBytes.length);
-        FileIO.write(aesKeyFile, encoder.encode(data)); //write to key file
+        FileIO.write(aesKeyFile, encoder.encode(rsa.encrypt(data, rsaKeyFile, rsaKeyType))); //write to key file
         LOGGER.info("AES key has been encrypted, encoded and written to " + aesKeyFile.getFileName().toString());
     }
 
