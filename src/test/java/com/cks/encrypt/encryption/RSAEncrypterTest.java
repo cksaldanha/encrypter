@@ -6,10 +6,12 @@
 package com.cks.encrypt.encryption;
 
 import com.cks.encrypt.encryption.RSAEncrypter.KeyType;
+import com.cks.encrypt.io.FileIO;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import javax.xml.bind.DatatypeConverter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,11 +27,11 @@ public class RSAEncrypterTest {
         encrypter.generateKeyPair();
         byte[] privateKey = encrypter.getPrivateKey();
         byte[] publicKey = encrypter.getPublicKey();
-        
+
         assertNotNull(privateKey);
         assertNotNull(publicKey);
     }
-    
+
     @Test
     public void testEncrypt_Simple1() throws GeneralSecurityException {
         Path keyFile = Paths.get("public.txt");
@@ -40,9 +42,9 @@ public class RSAEncrypterTest {
         assertNotNull(cipherBytes);
         assertNotEquals(cipherBytes, plainBytes);
     }
-    
+
     @Test
-    public void testDecrypt_Simple1() throws GeneralSecurityException {
+    public void testDecrypt_Simple1() throws Exception {
         Path keyFile = Paths.get("public.txt");
         RSAEncrypter encrypter = new RSAEncrypter();
         String msg = "This is a test message";
