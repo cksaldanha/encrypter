@@ -40,7 +40,7 @@ public class AESEncrypter {
     public void generateKey() throws GeneralSecurityException {
         KeyGenerator keyGen = KeyGenerator.getInstance(AES);
         SecureRandom secRand = new SecureRandom();
-        keyGen.init(256, secRand);
+        keyGen.init(128, secRand);
         keySpec = keyGen.generateKey();
     }
 
