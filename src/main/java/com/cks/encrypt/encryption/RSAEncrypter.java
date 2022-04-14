@@ -21,6 +21,7 @@ import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,7 +39,7 @@ public class RSAEncrypter {
     private PrivateKey privateKey;
     private PublicKey publicKey;
     
-    enum KeyType { PUBLIC, PRIVATE }
+    public enum KeyType { PUBLIC, PRIVATE }
     
     public void generateKeyPair() throws NoSuchAlgorithmException {
         try {
@@ -59,12 +60,26 @@ public class RSAEncrypter {
         }
     }
     
-    public byte[] getPrivateKey() {
-        return privateKey.getEncoded();
+    public Key getPrivateKey() {
+        return privateKey;
     }
     
-    public byte[] getPublicKey() {
-        return publicKey.getEncoded();
+    public Key getPublicKey() {
+        return publicKey;
+    }
+    
+    public void savePrivateKey(Path filepath) throws IOException {
+        saveKeyToFile(getPrivateKey(), filepath);
+    }
+    
+    public void savePublicKey(Path filepath) throws IOException {
+        saveKeyToFile(getPublicKey(), filepath);
+    }
+    
+    private void saveKeyToFile(Key key, Path filepath) throws IOException {
+        byte[] keyBytes = key.getEncoded();
+        Encoder encoder = Base64.getEncoder();
+        FileIO.write(filepath, encoder.encode(keyBytes));
     }
 
     public byte[] encrypt(byte[] plainBytes, Path keyFile, KeyType keyType) throws GeneralSecurityException {
