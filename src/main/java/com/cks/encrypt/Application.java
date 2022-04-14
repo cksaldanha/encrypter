@@ -173,10 +173,10 @@ public class Application {
         try {
             rsa.generateKeyPair();
             Encoder encoder = Base64.getEncoder();
-            byte[] privateKeyBytes = rsa.getPrivateKey();
+            byte[] privateKeyBytes = rsa.getPrivateKey().getEncoded();
             byte[] privateKeyBytesEncoded = encoder.encode(privateKeyBytes);
 
-            byte[] publicKeyBytes = rsa.getPublicKey();
+            byte[] publicKeyBytes = rsa.getPublicKey().getEncoded();
             byte[] publicKeyBytesEncoded = encoder.encode(publicKeyBytes);
 
             FileIO.write(Paths.get("private.txt"), privateKeyBytesEncoded);
