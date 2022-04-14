@@ -85,6 +85,22 @@ public class Application {
                             aes.saveKey(key, Paths.get(command.getFlag("rsa_key")), KeyType.PUBLIC);
                         }
                         break;
+                    case Command.CMD_DECRYPT:
+                        try {   //limit scope of variables
+                            Path aesKeyPath = Paths.get(command.getFlag("aes_key"));
+                            Path rsaKeyPath = Paths.get(command.getFlag("rsa_key"));
+                            Path filePath = Paths.get(command.getFlag("filename"));
+                            AESEncrypter aes = new AESEncrypter();
+                            aes.loadKey(aesKeyPath, rsaKeyPath, KeyType.PRIVATE);
+                            byte[] plainBytes = aes.decrypt(FileIO.read(filePath));
+                            //save plain bytes to another file
+                            Path decryptPath = FileIO.changeFileExtension(filePath, ".decrypt");
+                            FileIO.write(decryptPath, plainBytes);
+                        } catch (Exception x) {
+                            LOGGER.severe(x.getMessage());
+                            throw x;
+                        }
+                        break;
                     case Command.CMD_RSA:
                         Path rsaPublicKeyFile = Paths.get(command.getFlag("filename1", "public.key"));
                         Path rsaPrivateKeyFile = Paths.get(command.getFlag("filename2", "private.key"));
