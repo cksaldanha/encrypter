@@ -56,4 +56,11 @@ public class Command {
         
         return flags.get(key);
     }
+    
+    public String getFlag(String key, String defResult) {
+        if (!flags.containsKey(key))
+            return defResult;
+        
+        return flags.get(key);
+    }
 }
