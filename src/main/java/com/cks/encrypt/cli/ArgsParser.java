@@ -20,8 +20,9 @@ public class ArgsParser {
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
                 switch (args.length) {
-                    case 2:
-                        command.addFlag(new Flag("filename", args[1]));
+                    case 3:
+                        command.addFlag(new Flag("rsa_key", args[1]));
+                        command.addFlag(new Flag("filename", args[2]));
                         break;
                     case 4:
                         command.addFlag(new Flag("aes_key", args[1]));
@@ -48,7 +49,7 @@ public class ArgsParser {
                     case 1:
                         //default filename values for RSA generation command
                         command.addFlag(new Flag("filename1", "public.key"));
-                        command.addFlag(new Flag("filename1", "private.key"));
+                        command.addFlag(new Flag("filename2", "private.key"));
                         break;
                     case 3:
                         command.addFlag(new Flag("filename1", args[1]));
