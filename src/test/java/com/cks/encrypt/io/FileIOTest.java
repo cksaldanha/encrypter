@@ -26,4 +26,17 @@ public class FileIOTest {
         Path path = Paths.get("simple.txt");
         assertTrue(Files.exists(path));
     }
+    
+    @Test
+    public void testChangeFileExtension_Simple1() {
+        Path sample = Paths.get("sample.txt");
+        Path act = FileIO.changeFileExtension(sample, ".secure");
+        assertEquals("sample.secure", act.toString());
+    }
+    @Test
+    public void testChangeFileExtension_Simple2() {
+        Path sample = Paths.get("sample.secure");
+        Path act = FileIO.changeFileExtension(sample, ".pdf");
+        assertEquals("sample.pdf", act.toString());
+    }
 }

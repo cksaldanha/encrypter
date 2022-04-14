@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -34,5 +35,12 @@ public class FileIO {
             }
         }
         return bytes.toByteArray();
+    }
+    
+    public static Path changeFileExtension(Path path, String ext) {
+        StringBuilder sb = new StringBuilder(path.getFileName().toString());
+        sb.delete(sb.lastIndexOf("."), sb.length());
+        sb.append(ext);
+        return Paths.get(sb.toString());
     }
 }
