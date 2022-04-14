@@ -72,17 +72,33 @@ public class Application {
                 //process command
                 switch (command.getCommand()) {
                     case Command.CMD_ENCRYPT:
-                        if (command.getFlagCount() == 2) {  //create new AES key and save with public RSA
+                        try {
+                            String aesKeyFlag = command.getFlag("aes_key", null);   //may not be a supplied argument
+                            Path rsaKeyPath = Paths.get(command.getFlag("rsa_key"));
+                            Path filePath = Paths.get(command.getFlag("filename"));
+
                             AESEncrypter aes = new AESEncrypter();
-                            aes.generateKey();
-                            aes.generateIv();
-                            Path file = Paths.get(command.getFlag("filename"));
-                            Path key = Paths.get("aes.key");
-                            byte[] cipherBytes = aes.encrypt(FileIO.read(file));
-                            Path newfile = FileIO.changeFileExtension(file, ".secure");
-                            FileIO.write(newfile, cipherBytes);
+                            if (aesKeyFlag == null) {   //generate new key and save
+                                aes.generateKey();
+                                aes.generateIv();
+                                aes.saveKey(Paths.get("aes.key"), rsaKeyPath, KeyType.PUBLIC);
+                                LOGGER.info("New AES Key generated and saved");
+                            } else {                    //load key
+                                Path aesKeyPath = Paths.get(aesKeyFlag);
+                                aes.loadKey(aesKeyPath, rsaKeyPath, KeyType.PRIVATE);
+                                LOGGER.info("AES loaded");
+                            }
+
+                            byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
+                            Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
+                            LOGGER.info("Encryption started.");
+                            FileIO.write(encryptPath, cipherBytes);
+                            LOGGER.info("Encryption complete.");
                             System.out.println("File has been encrypted.");
-                            aes.saveKey(key, Paths.get(command.getFlag("rsa_key")), KeyType.PUBLIC);
+
+                        } catch (Exception x) {
+                            LOGGER.severe(x.getMessage());
+                            throw x;
                         }
                         break;
                     case Command.CMD_DECRYPT:
