@@ -5,6 +5,8 @@
  */
 package com.cks.encrypt;
 
+import com.cks.encrypt.cli.ArgsParser;
+import com.cks.encrypt.cli.Command;
 import com.cks.encrypt.encryption.AESEncrypter;
 import com.cks.encrypt.encryption.RSAEncrypter;
 import com.cks.encrypt.encryption.RSAEncrypter.KeyType;
@@ -63,21 +65,56 @@ public class Application {
         LOGGER.setUseParentHandlers(false);
         LOGGER.info("Application started.");
 
-//        LOGGER.fine("Encrypting the test pdf");
-//        encryptFile(Paths.get("test.pdf"), Paths.get("aes.key"));
-//        LOGGER.fine("Encryption done.");
-//        try {
-//            Thread.sleep(2000); //sleep 2s
-//        } catch (InterruptedException x) { }
-        Path encryptedFile = Paths.get("test.pdf.secure");
-        LOGGER.fine("Decrypting file " + encryptedFile.getFileName().toString());
-        decryptFile(encryptedFile);
-        LOGGER.fine("Decryption complete.");
-        LOGGER.fine("Exiting.");
+        //Add command line logic
+        try {
+            Command command = ArgsParser.parseArgs(args);
+            try {
+                //process command
+                switch (command.getCommand()) {
+                    case Command.CMD_ENCRYPT:
+                        if (command.getFlagCount() == 2) {  //create new AES key and save with public RSA
+                            AESEncrypter aes = new AESEncrypter();
+                            aes.generateKey();
+                            aes.generateIv();
+                            Path file = Paths.get(command.getFlag("filename"));
+                            Path key = Paths.get("aes.key");
+                            byte[] cipherBytes = aes.encrypt(FileIO.read(file));
+                            Path newfile = FileIO.changeFileExtension(file, ".secure");
+                            FileIO.write(newfile, cipherBytes);
+                            System.out.println("File has been encrypted.");
+                            aes.saveKey(key, Paths.get(command.getFlag("rsa_key")), KeyType.PUBLIC);
+                        }
+                        break;
+                    case Command.CMD_RSA:
+                        Path rsaPublicKeyFile = Paths.get(command.getFlag("filename1", "public.key"));
+                        Path rsaPrivateKeyFile = Paths.get(command.getFlag("filename2", "private.key"));
+                        RSAEncrypter rsa = new RSAEncrypter();
+                        rsa.generateKeyPair();
+                        rsa.savePrivateKey(rsaPrivateKeyFile);
+                        rsa.savePublicKey(rsaPublicKeyFile);
+                        LOGGER.fine("RSA key pair have been generated");
+                        System.out.println("RSA key pair has been generated. Keep private key safe.");
+                        break;
 
-//        LOGGER.info("Generating keys");
-//        generateKeyFiles();
-//        LOGGER.info("Keys created.");
+                }
+            } catch (Exception x) {
+                x.printStackTrace();
+                System.out.println(x.getMessage());
+                throw new IllegalArgumentException(x);
+            }
+
+        } catch (IllegalArgumentException x) {
+            usage();
+            LOGGER.severe(x.getMessage());
+        }
+    }
+
+    public static void usage() {
+        System.out.printf("java encrypter <command> <arguments>\n");
+        System.out.printf("\tCommands:\n");
+        System.out.printf("\t\tencrypt [aes key file] [rsa key file] <filename>\n");
+        System.out.printf("\t\tdecrypt <aes key file> <rsa key file> <filename>\n");
+        System.out.printf("\t\trsa [public key file] [private key file]\n");
     }
 
     public static void encryptFile(Path file) {
