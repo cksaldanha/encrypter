@@ -54,14 +54,4 @@ public class RSAEncrypterTest {
         byte[] decryptBytes = encrypter.decrypt(cipherBytes, Paths.get("private.txt"), KeyType.PRIVATE);
         assertEquals(new String(plainBytes), new String(decryptBytes));
     }
-
-    @Test
-    public void testDecrypt_Simple2() throws Exception {
-        Path keyFile = Paths.get("public.txt");
-        RSAEncrypter encrypter = new RSAEncrypter();
-        byte[] plainBytes = FileIO.read(Paths.get("test.pdf"));
-        byte[] cipherBytes = encrypter.encrypt(plainBytes, keyFile, KeyType.PUBLIC);
-        byte[] decryptBytes = encrypter.decrypt(cipherBytes, Paths.get("private.txt"), KeyType.PRIVATE);
-        assertEquals(DatatypeConverter.printHexBinary(plainBytes), DatatypeConverter.printHexBinary(decryptBytes));
-    }
 }

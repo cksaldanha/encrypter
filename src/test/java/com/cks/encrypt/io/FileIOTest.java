@@ -26,11 +26,4 @@ public class FileIOTest {
         Path path = Paths.get("simple.txt");
         assertTrue(Files.exists(path));
     }
-
-    @Test
-    public void testRead_Simple1() throws Exception {
-        byte[] bytes = FileIO.read(Paths.get("simple.txt"));
-        assertEquals("This is a test", new String(bytes));
-    }
-    
 }

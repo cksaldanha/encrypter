@@ -81,13 +81,4 @@ public class AESEncrypterTest {
         FileIO.write(Paths.get("simple.txt"), cipherBytes);
         assertNotNull(cipherBytes);
     }
-
-    @Test
-    public void testDecrypt_Simple1_withFile() throws Exception {
-        AESEncrypter aes = new AESEncrypter();
-        aes.loadKey(Paths.get("aes_key.txt"), Paths.get("private.txt"), RSAEncrypter.KeyType.PRIVATE);
-        byte[] cipherBytes = FileIO.read(Paths.get("simple.txt"));
-        byte[] plainBytes = aes.decrypt(cipherBytes);
-        assertEquals("Simple text message", new String(plainBytes));
-    }
 }

@@ -16,10 +16,10 @@ public class ArgsParserTest {
 
     @Test
     public void testParseArgs_Simple1() {
-        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "C:\\users\\colin.saldanha\\test.pdf"});
+        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "rsa_key", "C:\\users\\colin.saldanha\\test.pdf"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "encrypt");
-        assertTrue(command.getFlagCount() == 1);
+        assertTrue(command.getFlagCount() == 2);
     }
     @Test
     public void testParseArgs_Simple2() {
