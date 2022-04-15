@@ -73,9 +73,8 @@ public class Application {
                 switch (command.getCommand()) {
                     case Command.CMD_ENCRYPT:
                         try {
-                            String aesKeyFlag = command.getFlag("aes_key", null);   //may not be a supplied argument
+                            String aesKeyFlag = command.getFlag("aes_key");   //may not be a supplied argument
                             Path rsaKeyPath = Paths.get(command.getFlag("rsa_key"));
-                            Path filePath = Paths.get(command.getFlag("filename"));
 
                             AESEncrypter aes = new AESEncrypter();
                             if (aesKeyFlag == null) {   //generate new key and save
@@ -88,15 +87,18 @@ public class Application {
                                 aes.loadKey(aesKeyPath, rsaKeyPath, KeyType.PRIVATE);
                                 LOGGER.info("AES loaded");
                             }
-
-                            byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
-                            Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
-                            LOGGER.info("Encryption started.");
-                            FileIO.write(encryptPath, cipherBytes);
-                            LOGGER.info("Encryption complete.");
-                            System.out.println("File has been encrypted.");
-
+                            final String FILENAME = "filename";
+                            for (int i = 0; i < command.getFileCount(); i++) {
+                                Path filePath = Paths.get(command.getFlag(FILENAME + (i + 1)));
+                                byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
+                                Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
+                                LOGGER.info(String.format("Encryption of %s started.", encryptPath.getFileName().toString()));
+                                FileIO.write(encryptPath, cipherBytes);
+                                LOGGER.info(String.format("Encryption of %s complete.", encryptPath.getFileName().toString()));
+                                System.out.println(String.format("File %s has been encrypted.", encryptPath.getFileName().toString()));
+                            }
                         } catch (Exception x) {
+                            x.printStackTrace();
                             LOGGER.severe(x.getMessage());
                             throw x;
                         }
