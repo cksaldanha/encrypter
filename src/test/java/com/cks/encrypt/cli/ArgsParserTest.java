@@ -16,10 +16,10 @@ public class ArgsParserTest {
 
     @Test
     public void testParseArgs_Simple1() {
-        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "rsa_key", "C:\\users\\colin.saldanha\\test.pdf"});
+        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "none", "rsa_key", "C:\\users\\colin.saldanha\\test.pdf"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "encrypt");
-        assertTrue(command.getFlagCount() == 2);
+        assertTrue(command.getFlagCount() == 3);
     }
     @Test
     public void testParseArgs_Simple2() {
@@ -41,5 +41,13 @@ public class ArgsParserTest {
         assertNotNull(command);
         assertEquals(command.getCommand(), "rsa");
         assertTrue(command.getFlagCount() == 2);
+    }
+    @Test
+    public void testParseArgs_Simple5() {
+        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "none", "rsa_key_path", "filepath1", "filepath2", "filepath3", "filepath4"});
+        assertNotNull(command);
+        assertEquals(command.getCommand(), "encrypt");
+        assertTrue(command.getFlagCount() == 6);
+        assertTrue(command.getFileCount() == 4);
     }
 }

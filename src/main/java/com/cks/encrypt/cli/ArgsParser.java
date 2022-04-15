@@ -24,9 +24,8 @@ public class ArgsParser {
                 }
 
                 String aes_key = args[1];
-                if (!aes_key.equals("none")) {
-                    command.addFlag(new Flag("aes_key", args[1]));
-                }
+                //Application.class uses a null checkk on aes_key + need the flag count
+                command.addFlag(new Flag("aes_key", aes_key.equals("none") ? null : aes_key));  
 
                 command.addFlag(new Flag("rsa_key", args[2]));
 
