@@ -19,19 +19,24 @@ public class ArgsParser {
         command.setCommand(args[0]);
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
-                switch (args.length) {
-                    case 3:
-                        command.addFlag(new Flag("rsa_key", args[1]));
-                        command.addFlag(new Flag("filename", args[2]));
-                        break;
-                    case 4:
-                        command.addFlag(new Flag("aes_key", args[1]));
-                        command.addFlag(new Flag("rsa_key", args[2]));
-                        command.addFlag(new Flag("filename", args[3])); 
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
+                if (args.length < 4) {
+                    throw new IllegalArgumentException();
                 }
+
+                String aes_key = args[1];
+                if (!aes_key.equals("none")) {
+                    command.addFlag(new Flag("aes_key", args[1]));
+                }
+
+                command.addFlag(new Flag("rsa_key", args[2]));
+
+                final String FILENAME = "filename";
+                int fileCount = 0;
+                for (int i = 3; i < args.length; i++) {
+                    command.addFlag(new Flag(FILENAME + (i - 2), args[i]));
+                    fileCount++;
+                }
+                command.setFileCount(fileCount);
                 break;
             case Command.CMD_DECRYPT:
                 switch (args.length) {

@@ -15,52 +15,64 @@ import java.util.Map;
  * @author colin.saldanha
  */
 public class Command {
-    
+
     public static final String CMD_ENCRYPT = "encrypt";
     public static final String CMD_DECRYPT = "decrypt";
     public static final String CMD_RSA = "rsa";
-    
+
     private String command;
+    private int fileCount;
     private Map<String, String> flags = new HashMap<>();
-    
+
     public Command() {
     }
-    
+
     public Command(String command, Flag... flags) {
         this.command = command.toLowerCase();
         for (Flag flag : flags) {
-            if (flag != null && !flag.equals(""))
+            if (flag != null && !flag.equals("")) {
                 this.flags.put(flag.getKey(), flag.getValue());
+            }
         }
     }
-    
+
     public void setCommand(String command) {
         this.command = command;
     }
-    
+
     public String getCommand() {
         return command;
     }
-    
+
     public int getFlagCount() {
         return flags.size();
     }
-    
+
     public void addFlag(Flag flag) {
         flags.put(flag.getKey(), flag.getValue());
     }
-    
+
     public String getFlag(String key) {
-        if (!flags.containsKey(key))
+        if (!flags.containsKey(key)) {
             throw new IllegalArgumentException(String.format("Flag %s is not provided.", key));
-        
+        }
+
         return flags.get(key);
     }
-    
+
     public String getFlag(String key, String defResult) {
-        if (!flags.containsKey(key))
+        if (!flags.containsKey(key)) {
             return defResult;
-        
+        }
+
         return flags.get(key);
+    }
+
+    public int getFileCount() {
+        return fileCount;
+    }
+
+    public void setFileCount(int count) {
+        fileCount = count;
     }
 }
