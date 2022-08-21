@@ -53,12 +53,14 @@ public class AESEncrypterTest {
     }
 
     @Test
-    public void testSaveKey_Simple1() throws Exception {
+    public void testSaveKey_NoRSA_NoEncoding() throws Exception {
         AESEncrypter aes = new AESEncrypter();
         aes.generateKey();
         aes.generateIv();
-        aes.saveKey(Paths.get("aes_key.txt"), Paths.get("public.txt"), RSAEncrypter.KeyType.PUBLIC);
-        assertTrue(Files.exists(Paths.get("aes_key.txt")));
+        Path keyFilePath = Paths.get("aes_key");
+        aes.savekey(keyFilePath);
+        assertTrue(Files.exists(keyFilePath));
+        Files.deleteIfExists(keyFilePath);
     }
 
     @Test
