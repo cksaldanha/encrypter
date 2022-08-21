@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.logging.Level;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
@@ -62,6 +63,12 @@ public class AESEncrypter {
         keySpec = new SecretKeySpec(key, AES);
     }
 
+    public void savekey(Path aesKeyFile) throws IOException, GeneralSecurityException {
+        byte[] data = createKeyDataArray();
+        FileIO.write(aesKeyFile, data);
+        LOGGER.log(Level.INFO, "AES key has been saved to {0}.", aesKeyFile.getFileName().toString());
+    }
+
     public void saveKey(Path aesKeyFile, Path rsaKeyFile, KeyType rsaKeyType) throws IOException, GeneralSecurityException {
         if (keySpec == null) {
             throw new GeneralSecurityException("No key found.");
@@ -80,6 +87,23 @@ public class AESEncrypter {
         ArraysHelper.copyBytes(data, iv.length, keyBytes, 0, keyBytes.length);
         FileIO.write(aesKeyFile, encoder.encode(rsa.encrypt(data, rsaKeyFile, rsaKeyType))); //write to key file
         LOGGER.info("AES key has been encrypted, encoded and written to " + aesKeyFile.getFileName().toString());
+    }
+
+    private byte[] createKeyDataArray() throws IOException, GeneralSecurityException {
+        if (keySpec == null) {
+            throw new GeneralSecurityException("No key found.");
+        }
+
+        if (ivSpec == null) {
+            throw new GeneralSecurityException("No initialization vector found.");
+        }
+
+        byte[] keyBytes = keySpec.getEncoded();
+        byte[] ivBytes = ivSpec.getIV();
+        byte[] data = new byte[(ivBytes.length + keyBytes.length)];
+        ArraysHelper.copyBytes(data, 0, ivBytes, 0, ivBytes.length);
+        ArraysHelper.copyBytes(data, ivBytes.length, keyBytes, 0, keyBytes.length);
+        return data;
     }
 
     public byte[] encrypt(byte[] plainBytes) throws GeneralSecurityException {
