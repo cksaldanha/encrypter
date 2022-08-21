@@ -70,23 +70,11 @@ public class AESEncrypter {
     }
 
     public void saveKey(Path aesKeyFile, Path rsaKeyFile, KeyType rsaKeyType) throws IOException, GeneralSecurityException {
-        if (keySpec == null) {
-            throw new GeneralSecurityException("No key found.");
-        }
-
-        if (ivSpec == null) {
-            throw new GeneralSecurityException("No initialization vector found.");
-        }
-
         RSAEncrypter rsa = new RSAEncrypter();
         Encoder encoder = Base64.getEncoder();
-        byte[] keyBytes = keySpec.getEncoded();
-        byte[] iv = ivSpec.getIV();
-        byte[] data = new byte[ivSpec.getIV().length + keySpec.getEncoded().length];
-        ArraysHelper.copyBytes(data, 0, iv, 0, iv.length);
-        ArraysHelper.copyBytes(data, iv.length, keyBytes, 0, keyBytes.length);
+        byte[] data = createKeyDataArray();
         FileIO.write(aesKeyFile, encoder.encode(rsa.encrypt(data, rsaKeyFile, rsaKeyType))); //write to key file
-        LOGGER.info("AES key has been encrypted, encoded and written to " + aesKeyFile.getFileName().toString());
+        LOGGER.log(Level.INFO, "AES key has been encrypted, encoded and written to {0}", aesKeyFile.getFileName().toString());
     }
 
     private byte[] createKeyDataArray() throws IOException, GeneralSecurityException {
