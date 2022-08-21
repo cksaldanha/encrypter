@@ -41,7 +41,7 @@ public class Flag {
             return false;
         }
         Flag other = (Flag) obj;
-        return Objects.equals(key, other.key) && Objects.equals(value, other.value);
+        return Objects.equals(key, other.key);
     }
 
     @Override
