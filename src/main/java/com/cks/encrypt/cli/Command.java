@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author colin.saldanha
  */
-public class Command {
+public abstract class Command {
 
     public static final String CMD_ENCRYPT = "encrypt";
     public static final String CMD_DECRYPT = "decrypt";
@@ -75,4 +75,6 @@ public class Command {
     public void setFileCount(int count) {
         fileCount = count;
     }
+
+    public abstract void execute();
 }
