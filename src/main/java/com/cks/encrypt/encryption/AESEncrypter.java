@@ -52,6 +52,16 @@ public class AESEncrypter {
         ivSpec = new IvParameterSpec(iv);
     }
 
+    public void loadKey(Path aesKeyFile) throws IOException, GeneralSecurityException {
+        byte[] data = FileIO.read(aesKeyFile);
+        byte[] ivBytes = Arrays.copyOfRange(data, 0, 16);
+        byte[] keyBytes = Arrays.copyOfRange(data, 16, data.length);
+        Arrays.fill(data, (byte) 0);
+        ivSpec = new IvParameterSpec(ivBytes);
+        keySpec = new SecretKeySpec(keyBytes, AES);
+        LOGGER.log(Level.INFO, "AES key has been loaded");
+    }
+
     public void loadKey(Path aesKeyFile, Path rsaKeyFile, KeyType rsaKeyType) throws IOException, GeneralSecurityException {
         RSAEncrypter rsa = new RSAEncrypter();
         Decoder decoder = Base64.getDecoder();
