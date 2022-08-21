@@ -12,6 +12,7 @@ import java.util.Objects;
  * @author colin.saldanha
  */
 public class Flag {
+
     private final String key;
     private final String value;
 
@@ -19,31 +20,37 @@ public class Flag {
         this.key = key;
         this.value = value;
     }
-    
+
     public String getKey() {
         return key;
     }
-    
+
     public String getValue() {
         return value;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (this == obj) return true;
-        if (!getClass().equals(obj.getClass())) return false;
-        Flag other = (Flag)obj;
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (!getClass().equals(obj.getClass())) {
+            return false;
+        }
+        Flag other = (Flag) obj;
         return Objects.equals(key, other.key) && Objects.equals(value, other.value);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(key);
     }
-    
+
     @Override
     public String toString() {
-        return "Flag[key=" + key + ", value=" +  value + "]";
+        return "Flag[key=" + key + ", value=" + value + "]";
     }
 }

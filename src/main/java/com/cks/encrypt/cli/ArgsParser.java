@@ -10,11 +10,12 @@ package com.cks.encrypt.cli;
  * @author colin.saldanha
  */
 public class ArgsParser {
-    
+
     public static Command parseArgs(String[] args) {
-        if (args.length == 0)
+        if (args.length == 0) {
             throw new IllegalArgumentException();
-        
+        }
+
         Command command = new Command();
         command.setCommand(args[0]);
         switch (args[0]) {
@@ -25,7 +26,7 @@ public class ArgsParser {
 
                 String aes_key = args[1];
                 //Application.class uses a null checkk on aes_key + need the flag count
-                command.addFlag(new Flag("aes_key", aes_key.equals("none") ? null : aes_key));  
+                command.addFlag(new Flag("aes_key", aes_key.equals("none") ? null : aes_key));
 
                 command.addFlag(new Flag("rsa_key", args[2]));
 

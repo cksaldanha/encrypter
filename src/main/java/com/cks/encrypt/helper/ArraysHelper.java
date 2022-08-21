@@ -12,10 +12,12 @@ package com.cks.encrypt.helper;
 public class ArraysHelper {
 
     public static void copyBytes(byte[] dst, int start, byte[] src, int offset, int len) {
-        if ((dst.length - start) < len)
+        if ((dst.length - start) < len) {
             throw new IllegalArgumentException("Source bytes length are too long for destination");
+        }
 
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++) {
             dst[start + i] = src[offset + i];
+        }
     }
 }

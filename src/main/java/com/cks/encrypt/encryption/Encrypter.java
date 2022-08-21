@@ -12,6 +12,8 @@ import java.nio.file.Path;
  * @author colin.saldanha
  */
 public interface Encrypter {
+
     byte[] encrypt(byte[] plainBytes, Path keyFile) throws Exception;
+
     byte[] decrypt(byte[] cipherBytes, Path keyFile) throws Exception;
 }

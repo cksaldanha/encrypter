@@ -17,14 +17,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.logging.Logger;
 import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -35,12 +33,14 @@ public class RSAEncrypter {
 
     private static final Logger LOGGER = Logger.getLogger("com.cks");
     private static final String RSA = "RSA";
-    
+
     private PrivateKey privateKey;
     private PublicKey publicKey;
-    
-    public enum KeyType { PUBLIC, PRIVATE }
-    
+
+    public enum KeyType {
+        PUBLIC, PRIVATE
+    }
+
     public void generateKeyPair() throws NoSuchAlgorithmException {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA);
@@ -50,32 +50,32 @@ public class RSAEncrypter {
             LOGGER.info("PrivateKeyClass: " + privateKey.getClass().getName());
             publicKey = keyPair.getPublic();
             LOGGER.info("PublicKeyClass: " + privateKey.getClass().getName());
-            
+
             LOGGER.fine("Private: " + DatatypeConverter.printHexBinary(privateKey.getEncoded()));
             LOGGER.fine("Public: " + DatatypeConverter.printHexBinary(publicKey.getEncoded()));
-            
+
         } catch (NoSuchAlgorithmException x) {
             LOGGER.severe(x.getMessage());
             throw new RuntimeException("Could not use RSA Algorithm: " + x.getMessage());
         }
     }
-    
+
     public Key getPrivateKey() {
         return privateKey;
     }
-    
+
     public Key getPublicKey() {
         return publicKey;
     }
-    
+
     public void savePrivateKey(Path filepath) throws IOException {
         saveKeyToFile(getPrivateKey(), filepath);
     }
-    
+
     public void savePublicKey(Path filepath) throws IOException {
         saveKeyToFile(getPublicKey(), filepath);
     }
-    
+
     private void saveKeyToFile(Key key, Path filepath) throws IOException {
         byte[] keyBytes = key.getEncoded();
         Encoder encoder = Base64.getEncoder();
@@ -88,7 +88,7 @@ public class RSAEncrypter {
             Cipher cipher = Cipher.getInstance(RSA);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return cipher.doFinal(plainBytes);
-            
+
         } catch (IOException x) {
             LOGGER.severe("Could not read from key file.");
             LOGGER.fine(x.getMessage());

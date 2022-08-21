@@ -18,13 +18,13 @@ import java.nio.file.Paths;
  * @author colin.saldanha
  */
 public class FileIO {
-    
+
     public static void write(Path path, byte[] bytes) throws IOException {
         try (OutputStream out = Files.newOutputStream(path)) {
             out.write(bytes);
         }
     }
-    
+
     public static byte[] read(Path path) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         byte[] buff = new byte[1024];
@@ -36,7 +36,7 @@ public class FileIO {
         }
         return bytes.toByteArray();
     }
-    
+
     public static Path changeFileExtension(Path path, String ext) {
         StringBuilder sb = new StringBuilder(path.getFileName().toString());
         sb.delete(sb.lastIndexOf("."), sb.length());
