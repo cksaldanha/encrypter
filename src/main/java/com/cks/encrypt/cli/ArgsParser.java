@@ -16,7 +16,7 @@ public class ArgsParser {
             throw new IllegalArgumentException();
         }
 
-        Command command = new Command();
+        Command command = null;
         command.setCommand(args[0]);
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
@@ -64,6 +64,20 @@ public class ArgsParser {
                         throw new IllegalArgumentException();
                 }
                 break;
+            case Command.CMD_AES:
+                command = new AESCommand();
+                switch (args.length) {
+                    case 1:
+                        //default filename for aes_key
+                        command.addFlag(new Flag("filename", "aes.key"));
+                        break;
+                    case 2:
+                        command.addFlag(new Flag("filename", args[1]));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Too many arguments for aes command");
+                }
+
             default:
                 throw new IllegalArgumentException();
         }
