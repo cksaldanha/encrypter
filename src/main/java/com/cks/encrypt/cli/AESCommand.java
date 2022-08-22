@@ -45,4 +45,9 @@ public class AESCommand extends Command {
             throw new IllegalArgumentException(x);
         }
     }
+
+    @Override
+    public String getCommand() {
+        return "aes";
+    }
 }

@@ -53,4 +53,9 @@ public class RSACommand extends Command {
             throw new IllegalArgumentException(x);
         }
     }
+
+    @Override
+    public String getCommand() {
+        return "rsa";
+    }
 }
