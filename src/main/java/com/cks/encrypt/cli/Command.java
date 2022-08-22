@@ -65,5 +65,7 @@ public abstract class Command {
         fileCount = count;
     }
 
+    public abstract String getCommand();
+
     public abstract void execute();
 }
