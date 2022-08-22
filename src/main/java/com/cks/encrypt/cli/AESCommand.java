@@ -17,6 +17,14 @@ import java.security.GeneralSecurityException;
  */
 public class AESCommand extends Command {
 
+    public AESCommand() {
+        super();
+    }
+
+    public AESCommand(Flag... flags) {
+        super(flags);
+    }
+
     @Override
     public void execute() {
         try {
