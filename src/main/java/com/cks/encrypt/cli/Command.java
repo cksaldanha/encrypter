@@ -5,9 +5,7 @@
  */
 package com.cks.encrypt.cli;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +17,7 @@ public abstract class Command {
     public static final String CMD_ENCRYPT = "encrypt";
     public static final String CMD_DECRYPT = "decrypt";
     public static final String CMD_RSA = "rsa";
+    public static final String CMD_AES = "aes";
 
     private String command;
     private int fileCount;
