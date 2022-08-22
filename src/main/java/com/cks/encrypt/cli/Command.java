@@ -19,28 +19,18 @@ public abstract class Command {
     public static final String CMD_RSA = "rsa";
     public static final String CMD_AES = "aes";
 
-    private String command;
     private int fileCount;
     private Map<String, String> flags = new HashMap<>();
 
     public Command() {
     }
 
-    public Command(String command, Flag... flags) {
-        this.command = command.toLowerCase();
+    public Command(Flag... flags) {
         for (Flag flag : flags) {
             if (flag != null && !flag.equals("")) {
                 this.flags.put(flag.getKey(), flag.getValue());
             }
         }
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public String getCommand() {
-        return command;
     }
 
     public int getFlagCount() {
