@@ -25,7 +25,7 @@ public class AESCommand extends Command {
             aesEncrypter.generateIv();
             String filePath = this.getFlag("filename");
             aesEncrypter.savekey(Paths.get(filePath));
-            System.out.println("AES key has been generated. NOTE: Key is not encrypted. \n"
+            System.out.println("AES key has been generated. \nNOTE: Key is not encrypted. "
                     + "Use RSA encryption if transferring key to other parties.");
 
         } catch (IOException x) {
