@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  *
  * @author colin.saldanha
  */
-public class FlagParser {
+public abstract class FlagParser {
 
     private static final Logger LOGGER = Logger.getLogger("com.cks");
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("--\\w+=[\\w\\.]+");
@@ -58,6 +58,12 @@ public class FlagParser {
         } else {
             key = line.substring(start + 2);
         }
-        return new Flag(key, value);
+        Flag flag = new Flag(key, value);
+        if (!validateFlag(flag)) {
+            throw new IllegalArgumentException(String.format("%s is not a valid flag", flag.getKey()));
+        }
+        return flag;
     }
+
+    public abstract boolean validateFlag(Flag flag);
 }
