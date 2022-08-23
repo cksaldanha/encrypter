@@ -17,7 +17,6 @@ public class ArgsParser {
         }
 
         Command command = null;
-        command.setCommand(args[0]);
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
                 if (args.length < 4) {
