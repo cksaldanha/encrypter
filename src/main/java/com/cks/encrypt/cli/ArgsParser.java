@@ -65,18 +65,20 @@ public class ArgsParser {
                 break;
             case Command.CMD_AES:
                 command = new AESCommand();
+                FlagParser flagParser = new AESFlagParser();
                 switch (args.length) {
                     case 1:
                         //default filename for aes_key
-                        command.addFlag(new Flag("filename", "aes.key"));
+                        command.addFlag(new Flag("file", "aes.key"));
                         break;
                     case 2:
-                        command.addFlag(new Flag("filename", args[1]));
+                        Flag flag = flagParser.parseFlag(args[1]);
+                        command.addFlag(flag);
                         break;
                     default:
                         throw new IllegalArgumentException("Too many arguments for aes command");
                 }
-
+                break;
             default:
                 throw new IllegalArgumentException();
         }
