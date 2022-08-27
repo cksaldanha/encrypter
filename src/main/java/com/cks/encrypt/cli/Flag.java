@@ -14,9 +14,9 @@ import java.util.Objects;
 public class Flag {
 
     private final String key;
-    private final String value;
+    private final Object value;
 
-    public Flag(String key, String value) {
+    public Flag(String key, Object value) {
         this.key = key;
         this.value = value;
     }
@@ -25,7 +25,7 @@ public class Flag {
         return key;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
