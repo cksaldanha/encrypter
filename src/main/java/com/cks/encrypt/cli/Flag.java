@@ -6,6 +6,7 @@
 package com.cks.encrypt.cli;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  *
@@ -14,18 +15,21 @@ import java.util.Objects;
 public class Flag {
 
     private final String key;
-    private final Object value;
+    private final Optional<Object> value;
 
     public Flag(String key, Object value) {
+        if (key == null || key.equals("")) {
+            throw new IllegalArgumentException("Cannot have a null or empty flag key.");
+        }
         this.key = key;
-        this.value = value;
+        this.value = Optional.ofNullable(value);
     }
 
     public String getKey() {
         return key;
     }
 
-    public Object getValue() {
+    public Optional<Object> getValue() {
         return value;
     }
 
@@ -51,6 +55,6 @@ public class Flag {
 
     @Override
     public String toString() {
-        return "Flag[key=" + key + ", value=" + value + "]";
+        return "Flag[key=" + key + ", value=" + value.orElse("") + "]";
     }
 }
