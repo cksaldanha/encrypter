@@ -5,11 +5,10 @@
  */
 package com.cks.encrypt.cli;
 
-import com.cks.encrypt.encryption.AESEncrypter;
 import com.cks.encrypt.encryption.RSAEncrypter;
-import com.cks.encrypt.io.FileIO;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -40,32 +39,32 @@ public class RSACommand extends Command {
     @Override
     public void execute() {
         try {
-            String aesKeyFlag = getFlag("aes_key");
-            Path rsaKeyPath = Paths.get(getFlag("rsa_key"));
+            String publicFileName = null;
+            String privateFileName = null;
 
-            AESEncrypter aes = new AESEncrypter();
-            if (aesKeyFlag == null) {   //generate new key and save
-                aes.generateKey();
-                aes.generateIv();
-                aes.saveKey(Paths.get("aes.key"), rsaKeyPath, RSAEncrypter.KeyType.PUBLIC);
-                LOGGER.info("New AES Key generated and saved");
-            } else {                    //load key
-                Path aesKeyPath = Paths.get(aesKeyFlag);
-                aes.loadKey(aesKeyPath, rsaKeyPath, RSAEncrypter.KeyType.PRIVATE);
-                LOGGER.info("AES loaded");
+            if (getFlagCount() == 2) {
+                publicFileName = (String) getFlag("public").getValue().orElseThrow(IllegalArgumentException::new);
+                privateFileName = (String) getFlag("private").getValue().orElseThrow(IllegalArgumentException::new);
+            } else {
+                publicFileName = "rsaPublic.key";
+                privateFileName = "rsaPrivate.key";
             }
-            final String FILENAME = "filename";
-            for (int i = 0; i < getFileCount(); i++) {
-                Path filePath = Paths.get(getFlag(FILENAME + (i + 1)));
-                byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
-                Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
-                LOGGER.info(String.format("Encryption of %s started.", encryptPath.getFileName().toString()));
-                FileIO.write(encryptPath, cipherBytes);
-                LOGGER.info(String.format("Encryption of %s complete.", encryptPath.getFileName().toString()));
-                System.out.println(String.format("File %s has been encrypted.", encryptPath.getFileName().toString()));
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
+
+            RSAEncrypter rsa = new RSAEncrypter();
+            rsa.generateKeyPair();
+            rsa.savePrivateKey(Paths.get(privateFileName));
+            rsa.savePublicKey(Paths.get(publicFileName));
+
+            String msg = "RSA public and private keys have been generated.\nNOTE: Keep private key secure and do not share it.";
+            System.out.println(msg);
+
+        } catch (IOException x) {
+            System.out.println("Error writing keys.");
+            LOGGER.severe(x.getMessage());
+            throw new IllegalArgumentException(x);
+
+        } catch (GeneralSecurityException x) {
+            System.out.println("Error generating RSA keys.");
             LOGGER.severe(x.getMessage());
             throw new IllegalArgumentException(x);
         }
