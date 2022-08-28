@@ -10,6 +10,8 @@ import com.cks.encrypt.encryption.RSAEncrypter;
 import com.cks.encrypt.io.FileIO;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -19,6 +21,21 @@ import java.util.logging.Logger;
 public class RSACommand extends Command {
 
     private static final Logger LOGGER = Logger.getLogger("com.cks");
+
+    public static final Set<String> VALID_FLAG_KEYS;
+
+    static {
+        VALID_FLAG_KEYS = new HashSet<>();
+        VALID_FLAG_KEYS.add("public");
+        VALID_FLAG_KEYS.add("private");
+    }
+
+    public RSACommand() {
+    }
+
+    public RSACommand(Flag... flags) {
+        super(flags);
+    }
 
     @Override
     public void execute() {
@@ -52,6 +69,11 @@ public class RSACommand extends Command {
             LOGGER.severe(x.getMessage());
             throw new IllegalArgumentException(x);
         }
+    }
+
+    @Override
+    boolean validateFlag(Flag flag) {
+        return VALID_FLAG_KEYS.contains(flag.getKey());
     }
 
     @Override

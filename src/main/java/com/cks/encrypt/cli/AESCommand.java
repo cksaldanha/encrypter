@@ -10,12 +10,21 @@ import com.cks.encrypt.encryption.AESEncrypter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author colin.saldanha
  */
 public class AESCommand extends Command {
+
+    public static final Set<String> VALID_FLAG_KEYS;
+
+    static {
+        VALID_FLAG_KEYS = new HashSet<>();
+        VALID_FLAG_KEYS.add("files");
+    }
 
     public AESCommand() {
         super();
@@ -44,6 +53,11 @@ public class AESCommand extends Command {
             System.out.println("Error generating AES key.");
             throw new IllegalArgumentException(x);
         }
+    }
+
+    @Override
+    boolean validateFlag(Flag flag) {
+        return VALID_FLAG_KEYS.contains(flag.getKey());
     }
 
     @Override
