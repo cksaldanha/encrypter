@@ -50,4 +50,12 @@ public class ArgsParserTest {
         assertTrue(command.getFlagCount() == 6);
         assertTrue(command.getFileCount() == 4);
     }
+
+    @Test
+    public void testFormCommandLine_withAesCommandAndSpaces() {
+        String[] commandArgs = new String[]{"aes  ", "--key=value", "file.key "};
+        String expected = "aes --key=value file.key\n";
+        String actual = ArgsParser.getCommandLine(commandArgs);
+        assertEquals(expected, actual);
+    }
 }

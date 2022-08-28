@@ -15,7 +15,7 @@ public class ArgsParser {
         if (args.length == 0) {
             throw new IllegalArgumentException();
         }
-
+        String commandLine = getCommandLine(args);
         Command command = null;
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
@@ -83,5 +83,15 @@ public class ArgsParser {
                 throw new IllegalArgumentException();
         }
         return command;
+    }
+
+    public static String getCommandLine(String[] args) {
+        StringBuilder sb = new StringBuilder();
+        for (String arg : args) {
+            sb.append(arg.trim()).append(' ');
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append('\n');
+        return sb.toString();
     }
 }
