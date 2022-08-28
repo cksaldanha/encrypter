@@ -19,7 +19,7 @@ public abstract class Command {
     public static final String CMD_RSA = "rsa";
     public static final String CMD_AES = "aes";
 
-    private Map<String, String> flags = new HashMap<>();
+    private Map<String, Flag> flags = new HashMap<>();
 
     public Command() {
     }
@@ -27,7 +27,7 @@ public abstract class Command {
     public Command(Flag... flags) {
         for (Flag flag : flags) {
             if (flag != null && !flag.equals("")) {
-                this.flags.put(flag.getKey(), flag.getValue());
+                this.flags.put(flag.getKey(), flag);
             }
         }
     }
@@ -37,10 +37,10 @@ public abstract class Command {
     }
 
     public void addFlag(Flag flag) {
-        flags.put(flag.getKey(), flag.getValue());
+        flags.put(flag.getKey(), flag);
     }
 
-    public String getFlag(String key) {
+    public Flag getFlag(String key) {
         if (!flags.containsKey(key)) {
             throw new IllegalArgumentException(String.format("Flag %s is not provided.", key));
         }
