@@ -31,13 +31,22 @@ public class FlagParser {
         Set<Flag> keyOnlyFlags = parseKeyOnlyFlags(line);
         Flag fileNameFlag = parseFileNamesFlag(line);
 
-        flags.addAll(keyValueFlags);
-        flags.addAll(keyOnlyFlags);
+        combineFlags(keyValueFlags, flags);
+        combineFlags(keyOnlyFlags, flags);
         if (fileNameFlag != null) {
             flags.add(fileNameFlag);
         }
 
         return flags;
+    }
+
+    private void combineFlags(Set<Flag> source, Set<Flag> destination) {
+        for (Flag flag : source) {
+            if (destination.contains(flag)) {
+                throw new IllegalArgumentException(String.format("Ambigious flag: {%s}", flag.getKey()));
+            }
+            destination.add(flag);
+        }
     }
 
     public Set<Flag> parseKeyValueFlags(String line) {
