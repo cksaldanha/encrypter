@@ -24,7 +24,7 @@ public class FlagParser {
     private static final Pattern KEY_ONLY_PATTERN = Pattern.compile("--(?<key>[\\w-]+)(?=\\s)");
     private static final Pattern NO_KEY_PATTERN = Pattern.compile("(?<=\\s)[\\w]");
 
-    public Set<Flag> parseFlags(String line) {
+    public static Set<Flag> parseFlags(String line) {
         Set<Flag> flags = new HashSet<>();
 
         Set<Flag> keyValueFlags = parseKeyValueFlags(line);
@@ -40,7 +40,7 @@ public class FlagParser {
         return flags;
     }
 
-    private void combineFlags(Set<Flag> source, Set<Flag> destination) {
+    private static void combineFlags(Set<Flag> source, Set<Flag> destination) {
         for (Flag flag : source) {
             if (destination.contains(flag)) {
                 throw new IllegalArgumentException(String.format("Ambigious flag: {%s}", flag.getKey()));
@@ -49,14 +49,14 @@ public class FlagParser {
         }
     }
 
-    private String addLineTerminator(String line) {
+    private static String addLineTerminator(String line) {
         if (!line.endsWith("\n")) {
             line = line.concat("\n");
         }
         return line;
     }
 
-    public Set<Flag> parseKeyValueFlags(String line) {
+    public static Set<Flag> parseKeyValueFlags(String line) {
         line = addLineTerminator(line);
         Matcher matcher = KEY_VALUE_PATTERN.matcher(line);
         Set<Flag> flags = new HashSet<>();
@@ -68,7 +68,7 @@ public class FlagParser {
         return flags;
     }
 
-    public Set<Flag> parseKeyOnlyFlags(String line) {
+    public static Set<Flag> parseKeyOnlyFlags(String line) {
         line = addLineTerminator(line);
         Matcher matcher = KEY_ONLY_PATTERN.matcher(line);
         Set<Flag> flags = new HashSet<>();
@@ -79,7 +79,7 @@ public class FlagParser {
         return flags;
     }
 
-    public Flag parseFileNamesFlag(String line) {
+    public static Flag parseFileNamesFlag(String line) {
         line = addLineTerminator(line);
         Matcher matcher = NO_KEY_PATTERN.matcher(line);
         List<String> fileNames = new ArrayList<>();
