@@ -10,7 +10,9 @@ import com.cks.encrypt.encryption.AESEncrypter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,13 +39,25 @@ public class AESCommand extends Command {
     @Override
     public void execute() {
         try {
-            AESEncrypter aesEncrypter = new AESEncrypter();
-            aesEncrypter.generateKey();
-            aesEncrypter.generateIv();
-            String filePath = this.getFlag("filename");
-            aesEncrypter.savekey(Paths.get(filePath));
-            System.out.println("AES key has been generated. \nNOTE: Key is not encrypted. "
-                    + "Use RSA encryption if transferring key to other parties.");
+            int flagCount = getFlagCount();
+            List<String> fileNames = null;
+            if (flagCount > 0) {
+                fileNames = (List<String>) getFlag("files").getValue().orElseThrow(IllegalArgumentException::new);
+            } else {
+                fileNames = new ArrayList<>();
+                fileNames.add("aes.key");
+            }
+            int count = 0;
+            for (String fileName : fileNames) {
+                AESEncrypter aesEncrypter = new AESEncrypter();
+                aesEncrypter.generateKey();
+                aesEncrypter.generateIv();
+                aesEncrypter.savekey(Paths.get(fileName));
+                count++;
+            }
+            String msg = String.format("%d AES keys has been generated.\nNOTE: Keys are not encrypted. "
+                    + "Use RSA encryption if transferring key(s) to other parties.", count);
+            System.out.println(msg);
 
         } catch (IOException x) {
             System.out.println("Error writing key.");
