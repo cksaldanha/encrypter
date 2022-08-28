@@ -48,7 +48,6 @@ public class ArgsParserTest {
         assertNotNull(command);
         assertEquals(command.getCommand(), "encrypt");
         assertTrue(command.getFlagCount() == 6);
-        assertTrue(command.getFileCount() == 4);
     }
 
     @Test

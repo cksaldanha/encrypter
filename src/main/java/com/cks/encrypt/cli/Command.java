@@ -19,7 +19,6 @@ public abstract class Command {
     public static final String CMD_RSA = "rsa";
     public static final String CMD_AES = "aes";
 
-    private int fileCount;
     private Map<String, String> flags = new HashMap<>();
 
     public Command() {
@@ -55,14 +54,6 @@ public abstract class Command {
         }
 
         return flags.get(key);
-    }
-
-    public int getFileCount() {
-        return fileCount;
-    }
-
-    public void setFileCount(int count) {
-        fileCount = count;
     }
 
     public abstract String getCommand();
