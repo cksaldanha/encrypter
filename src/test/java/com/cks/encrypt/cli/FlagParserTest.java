@@ -23,7 +23,7 @@ public class FlagParserTest {
         Set<Flag> actual = parser.parseFlags("aes --first=first.Values");
         Set<Flag> expected = new HashSet<>();
         expected.add(new Flag("first", "first.Values"));
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -44,22 +44,6 @@ public class FlagParserTest {
         expected.add(new Flag("first", "first.Values"));
         expected.add(new Flag("second", "secondValue"));
         expected.add(new Flag("third", null));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testParseFlag_keyValueArgument() {
-        FlagParser parser = new FlagParser();
-        Flag actual = parser.parseFlag("--flag=value");
-        Flag expected = new Flag("flag", "value");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testParseFlag_keyOnlyArgument() {
-        FlagParser parser = new FlagParser();
-        Flag actual = parser.parseFlag("--flag");
-        Flag expected = new Flag("flag", null);
         assertEquals(expected, actual);
     }
 }
