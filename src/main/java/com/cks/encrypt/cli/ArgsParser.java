@@ -5,6 +5,8 @@
  */
 package com.cks.encrypt.cli;
 
+import java.util.Set;
+
 /**
  *
  * @author colin.saldanha
@@ -16,68 +18,20 @@ public class ArgsParser {
             throw new IllegalArgumentException();
         }
         String commandLine = getCommandLine(args);
+        Set<Flag> flags = FlagParser.parseFlags(commandLine);
         Command command = null;
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
-                if (args.length < 4) {
-                    throw new IllegalArgumentException();
-                }
-
-                String aes_key = args[1];
-                //Application.class uses a null checkk on aes_key + need the flag count
-                command.addFlag(new Flag("aes_key", aes_key.equals("none") ? null : aes_key));
-
-                command.addFlag(new Flag("rsa_key", args[2]));
-
-                final String FILENAME = "filename";
-                int fileCount = 0;
-                for (int i = 3; i < args.length; i++) {
-                    command.addFlag(new Flag(FILENAME + (i - 2), args[i]));
-                    fileCount++;
-                }
-                command.setFileCount(fileCount);
+                command = new EncryptCommand(flags.stream().toArray(Flag[]::new));
                 break;
             case Command.CMD_DECRYPT:
-                switch (args.length) {
-                    case 4:
-                        command.addFlag(new Flag("aes_key", args[1]));
-                        command.addFlag(new Flag("rsa_key", args[2]));
-                        command.addFlag(new Flag("filename", args[3]));
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
+                command = new DecryptCommand(flags.stream().toArray(Flag[]::new));
                 break;
             case Command.CMD_RSA:
-                switch (args.length) {
-                    case 1:
-                        //default filename values for RSA generation command
-                        command.addFlag(new Flag("filename1", "public.key"));
-                        command.addFlag(new Flag("filename2", "private.key"));
-                        break;
-                    case 3:
-                        command.addFlag(new Flag("filename1", args[1]));
-                        command.addFlag(new Flag("filename2", args[2]));
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
+                command = new RSACommand(flags.stream().toArray(Flag[]::new));
                 break;
             case Command.CMD_AES:
-                command = new AESCommand();
-                FlagParser flagParser = new AESFlagParser();
-                switch (args.length) {
-                    case 1:
-                        //default filename for aes_key
-                        command.addFlag(new Flag("file", "aes.key"));
-                        break;
-                    case 2:
-                        Flag flag = flagParser.parseFlag(args[1]);
-                        command.addFlag(flag);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Too many arguments for aes command");
-                }
+                command = new AESCommand(flags.stream().toArray(Flag[]::new));
                 break;
             default:
                 throw new IllegalArgumentException();
