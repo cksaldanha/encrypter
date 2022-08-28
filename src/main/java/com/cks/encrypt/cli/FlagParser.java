@@ -49,7 +49,15 @@ public class FlagParser {
         }
     }
 
+    private String addLineTerminator(String line) {
+        if (!line.endsWith("\n")) {
+            line = line.concat("\n");
+        }
+        return line;
+    }
+
     public Set<Flag> parseKeyValueFlags(String line) {
+        line = addLineTerminator(line);
         Matcher matcher = KEY_VALUE_PATTERN.matcher(line);
         Set<Flag> flags = new HashSet<>();
         while (matcher.find()) {
@@ -61,6 +69,7 @@ public class FlagParser {
     }
 
     public Set<Flag> parseKeyOnlyFlags(String line) {
+        line = addLineTerminator(line);
         Matcher matcher = KEY_ONLY_PATTERN.matcher(line);
         Set<Flag> flags = new HashSet<>();
         while (matcher.find()) {
@@ -71,6 +80,7 @@ public class FlagParser {
     }
 
     public Flag parseFileNamesFlag(String line) {
+        line = addLineTerminator(line);
         Matcher matcher = NO_KEY_PATTERN.matcher(line);
         List<String> fileNames = new ArrayList<>();
         while (matcher.find()) {

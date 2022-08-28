@@ -106,4 +106,16 @@ public class FlagParserTest {
         expected.add(new Flag("third", null));
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testParseFlags_mixedFlagsNoLineTerminater() {
+        FlagParser parser = new FlagParser();
+        Set<Flag> actual = parser.parseFlags("aes --first=first.Values  --third --second=secondValue --fourth");
+        Set<Flag> expected = new HashSet<>();
+        expected.add(new Flag("first", "first.Values"));
+        expected.add(new Flag("second", "secondValue"));
+        expected.add(new Flag("third", null));
+        expected.add(new Flag("fourth", null));
+        assertEquals(expected, actual);
+    }
 }
