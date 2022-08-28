@@ -27,15 +27,16 @@ public class FlagParser {
     public Set<Flag> parseFlags(String line) {
         Set<Flag> flags = new HashSet<>();
 
-        Set<Flag> keyValueFlags = parseFlagSet(KEY_VALUE_PATTERN, line);
-        Set<Flag> keyOnlyFlags = parseFlagSet(KEY_ONLY_PATTERN, line);
+        Set<Flag> keyValueFlags = parseKeyValueFlags(line);
+        Set<Flag> keyOnlyFlags = parseKeyOnlyFlags(line);
+        Flag fileNameFlag = parseFileNamesFlag(line);
 
         flags.addAll(keyValueFlags);
-        for (Flag flag : keyOnlyFlags) {
-            if (!flags.contains(flag)) {
-                flags.add(flag);
-            }
+        flags.addAll(keyOnlyFlags);
+        if (fileNameFlag != null) {
+            flags.add(fileNameFlag);
         }
+
         return flags;
     }
 
@@ -69,35 +70,4 @@ public class FlagParser {
         }
         return fileNames.size() > 0 ? new Flag("files", fileNames) : null;
     }
-
-    public Set<Flag> parseFlagSet(Pattern pattern, String line) {
-        Matcher matcher = pattern.matcher(line);
-        Set<Flag> flags = new HashSet<>();
-        while (matcher.find()) {
-            String match = matcher.group();
-            Flag flag = parseFlag(match);
-            flags.add(flag);
-        }
-        return flags;
-    }
-
-    public Flag parseFlag(String line) {
-        int start = line.indexOf("--");
-        int mid = line.indexOf("=");
-        String key = null;
-        String value = null;
-        if (mid > 0) {
-            key = line.substring(start + 2, mid);
-            value = line.substring(mid + 1);
-        } else {
-            key = line.substring(start + 2);
-        }
-        Flag flag = new Flag(key, value);
-        if (!validateFlag(flag)) {
-            throw new IllegalArgumentException(String.format("%s is not a valid flag", flag.getKey()));
-        }
-        return flag;
-    }
-
-    public abstract boolean validateFlag(Flag flag);
 }
