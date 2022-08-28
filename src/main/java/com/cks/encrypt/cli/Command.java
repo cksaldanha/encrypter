@@ -26,9 +26,10 @@ public abstract class Command {
 
     public Command(Flag... flags) {
         for (Flag flag : flags) {
-            if (flag != null && !flag.equals("")) {
-                this.flags.put(flag.getKey(), flag);
+            if (!validateFlag(flag)) {
+                throw new IllegalArgumentException(String.format("Invalid flag: %s", flag.getKey()));
             }
+            this.flags.put(flag.getKey(), flag);
         }
     }
 
@@ -37,7 +38,13 @@ public abstract class Command {
     }
 
     public void addFlag(Flag flag) {
-        flags.put(flag.getKey(), flag);
+        if (validateFlag(flag)) {
+            flags.put(flag.getKey(), flag);
+        }
+    }
+
+    public boolean containsFlag(String key) {
+        return flags.containsKey(key);
     }
 
     public Flag getFlag(String key) {
@@ -48,13 +55,7 @@ public abstract class Command {
         return flags.get(key);
     }
 
-    public String getFlag(String key, String defResult) {
-        if (!flags.containsKey(key)) {
-            return defResult;
-        }
-
-        return flags.get(key);
-    }
+    abstract boolean validateFlag(Flag flag);
 
     public abstract String getCommand();
 
