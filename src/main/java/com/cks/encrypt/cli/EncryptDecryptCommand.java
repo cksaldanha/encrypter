@@ -6,7 +6,11 @@
 package com.cks.encrypt.cli;
 
 import com.cks.encrypt.encryption.EncryptionAlgorithms;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,5 +45,19 @@ public abstract class EncryptDecryptCommand extends Command {
     @Override
     boolean validateFlag(Flag flag) {
         return VALID_FLAG_KEYS.contains(flag.getKey());
+    }
+
+    public Path getKeyFilePath() {
+        String keyFile = (String) getFlag("keypath")
+                .getValue()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid key file path specified."));
+        return Paths.get(keyFile);
+    }
+
+    public List<String> getFileList() {
+        List<String> list = (List<String>) getFlag("files")
+                .getValue()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid file list"));
+        return Collections.unmodifiableList(list);
     }
 }
