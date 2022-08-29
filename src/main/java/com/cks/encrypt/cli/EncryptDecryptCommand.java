@@ -20,6 +20,7 @@ public abstract class EncryptDecryptCommand extends Command {
     static {
         VALID_FLAG_KEYS = new HashSet<>();
         VALID_FLAG_KEYS.add("mode");
+        VALID_FLAG_KEYS.add("keypath");
         VALID_FLAG_KEYS.add("type");
         VALID_FLAG_KEYS.add("files");
     }
