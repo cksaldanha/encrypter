@@ -15,39 +15,43 @@ import static org.junit.Assert.*;
 public class ArgsParserTest {
 
     @Test
-    public void testParseArgs_Simple1() {
-        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "none", "rsa_key", "C:\\users\\colin.saldanha\\test.pdf"});
+    public void testParseArgs_encryptWithAESAndSingleFileFullPath() {
+        Command command = ArgsParser.parseArgs(new String[]{"encrypt", "--mode=aes", "--keypath=aes.key", "C:\\temp\\test.pdf"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "encrypt");
         assertTrue(command.getFlagCount() == 3);
     }
+
     @Test
-    public void testParseArgs_Simple2() {
-        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "aes_key_path", "rsa_key_path", "C:\\users\\colin.saldanha\\test.pdf"});
+    public void testParseArgs_encryptWithAESAndMultipleFilesRelativePath() {
+        Command command = ArgsParser.parseArgs(new String[]{"encrypt", "--mode=aes", "--keypath=aes.key", "file1.pdf", "file2.pdf", "file3.pdf"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "encrypt");
         assertTrue(command.getFlagCount() == 3);
     }
+
     @Test
-    public void testParseArgs_Simple3() {
-        Command command = ArgsParser.parseArgs(new String[] {"decrypt", "aes_key_path", "rsa_key_path", "C:\\users\\colin.saldanha\\test.pdf"});
+    public void testParseArgs_decryptWithRSAAndSingleFileRelativePath() {
+        Command command = ArgsParser.parseArgs(new String[]{"decrypt", "--mode=rsa", "--keypath=rsaPublic.key", "--type=public", "file1.pdf"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "decrypt");
-        assertTrue(command.getFlagCount() == 3);
+        assertTrue(command.getFlagCount() == 4);
     }
+
     @Test
-    public void testParseArgs_Simple4() {
-        Command command = ArgsParser.parseArgs(new String[] {"rsa", "filepath1", "filepath2"});
+    public void testParseArgs_rsaWithKeyFiles() {
+        Command command = ArgsParser.parseArgs(new String[]{"rsa", "--public=filepath1", "--private=filepath2"});
         assertNotNull(command);
         assertEquals(command.getCommand(), "rsa");
         assertTrue(command.getFlagCount() == 2);
     }
+
     @Test
-    public void testParseArgs_Simple5() {
-        Command command = ArgsParser.parseArgs(new String[] {"encrypt", "none", "rsa_key_path", "filepath1", "filepath2", "filepath3", "filepath4"});
+    public void testParseArgs_aesWithNoKeyFile() {
+        Command command = ArgsParser.parseArgs(new String[]{"aes"});
         assertNotNull(command);
-        assertEquals(command.getCommand(), "encrypt");
-        assertTrue(command.getFlagCount() == 6);
+        assertEquals(command.getCommand(), "aes");
+        assertTrue(command.getFlagCount() == 0);
     }
 
     @Test
