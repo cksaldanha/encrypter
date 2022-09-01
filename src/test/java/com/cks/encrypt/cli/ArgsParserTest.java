@@ -51,6 +51,26 @@ public class ArgsParserTest {
     }
 
     @Test
+    public void testParseArgs_rsaWithFilenamesNoPeriod() {
+        String[] args = new String[]{"rsa", "--public=rsaPublic", "--private=rsaPrivate"};
+        Command command = ArgsParser.parseArgs(args);
+        assertEquals("rsa", command.getCommand());
+        assertTrue(command.getFlagCount() == 2);
+        assertTrue(command.getFlag("public").getValue().isPresent());
+        assertTrue(command.getFlag("private").getValue().isPresent());
+    }
+
+    @Test
+    public void testParseArgs_rsaWithFilenamesWithPeriods() {
+        String[] args = new String[]{"rsa", "--public=rsaPublic.key", "--private=rsaPrivate.key"};
+        Command command = ArgsParser.parseArgs(args);
+        assertEquals("rsa", command.getCommand());
+        assertTrue(command.getFlagCount() == 2);
+        assertTrue(command.getFlag("public").getValue().isPresent());
+        assertTrue(command.getFlag("private").getValue().isPresent());
+    }
+
+    @Test
     public void testFormCommandLine_withAesCommandAndSpaces() {
         String[] commandArgs = new String[]{"aes  ", "--key=value", "file.key "};
         String expected = "aes --key=value file.key\n";
