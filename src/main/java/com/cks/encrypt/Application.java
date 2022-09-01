@@ -67,70 +67,10 @@ public class Application {
 
         //Add command line logic
         try {
-            Command command = ArgsParser.parseArgs(args);
             try {
-                //process command
-                switch (command.getCommand()) {
-                    case Command.CMD_ENCRYPT:
-                        try {
-                            String aesKeyFlag = command.getFlag("aes_key");   //may not be a supplied argument
-                            Path rsaKeyPath = Paths.get(command.getFlag("rsa_key"));
+                Command command = ArgsParser.parseArgs(args);
+                command.execute();
 
-                            AESEncrypter aes = new AESEncrypter();
-                            if (aesKeyFlag == null) {   //generate new key and save
-                                aes.generateKey();
-                                aes.generateIv();
-                                aes.saveKey(Paths.get("aes.key"), rsaKeyPath, KeyType.PUBLIC);
-                                LOGGER.info("New AES Key generated and saved");
-                            } else {                    //load key
-                                Path aesKeyPath = Paths.get(aesKeyFlag);
-                                aes.loadKey(aesKeyPath, rsaKeyPath, KeyType.PRIVATE);
-                                LOGGER.info("AES loaded");
-                            }
-                            final String FILENAME = "filename";
-                            for (int i = 0; i < command.getFileCount(); i++) {
-                                Path filePath = Paths.get(command.getFlag(FILENAME + (i + 1)));
-                                byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
-                                Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
-                                LOGGER.info(String.format("Encryption of %s started.", encryptPath.getFileName().toString()));
-                                FileIO.write(encryptPath, cipherBytes);
-                                LOGGER.info(String.format("Encryption of %s complete.", encryptPath.getFileName().toString()));
-                                System.out.println(String.format("File %s has been encrypted.", encryptPath.getFileName().toString()));
-                            }
-                        } catch (Exception x) {
-                            x.printStackTrace();
-                            LOGGER.severe(x.getMessage());
-                            throw x;
-                        }
-                        break;
-                    case Command.CMD_DECRYPT:
-                        try {   //limit scope of variables
-                            Path aesKeyPath = Paths.get(command.getFlag("aes_key"));
-                            Path rsaKeyPath = Paths.get(command.getFlag("rsa_key"));
-                            Path filePath = Paths.get(command.getFlag("filename"));
-                            AESEncrypter aes = new AESEncrypter();
-                            aes.loadKey(aesKeyPath, rsaKeyPath, KeyType.PRIVATE);
-                            byte[] plainBytes = aes.decrypt(FileIO.read(filePath));
-                            //save plain bytes to another file
-                            Path decryptPath = FileIO.changeFileExtension(filePath, ".decrypt");
-                            FileIO.write(decryptPath, plainBytes);
-                        } catch (Exception x) {
-                            LOGGER.severe(x.getMessage());
-                            throw x;
-                        }
-                        break;
-                    case Command.CMD_RSA:
-                        Path rsaPublicKeyFile = Paths.get(command.getFlag("filename1", "public.key"));
-                        Path rsaPrivateKeyFile = Paths.get(command.getFlag("filename2", "private.key"));
-                        RSAEncrypter rsa = new RSAEncrypter();
-                        rsa.generateKeyPair();
-                        rsa.savePrivateKey(rsaPrivateKeyFile);
-                        rsa.savePublicKey(rsaPublicKeyFile);
-                        LOGGER.fine("RSA key pair have been generated");
-                        System.out.println("RSA key pair has been generated. Keep private key safe.");
-                        break;
-
-                }
             } catch (Exception x) {
                 x.printStackTrace();
                 System.out.println(x.getMessage());
