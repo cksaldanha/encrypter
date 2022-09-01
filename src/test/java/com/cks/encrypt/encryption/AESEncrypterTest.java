@@ -5,13 +5,12 @@
  */
 package com.cks.encrypt.encryption;
 
-import com.cks.encrypt.io.FileIO;
+import com.cks.encrypt.cli.AESCommand;
+import com.cks.encrypt.cli.Command;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Key;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -40,16 +39,24 @@ public class AESEncrypterTest {
     }
 
     @Test
-    public void testLoadKey_Simple1() throws Exception {
+    public void testLoadKey_withSingleKeyFile() throws Exception {
+        //Arrange
+        Command command = new AESCommand();
+        command.execute();  //generates an 'aes.key' file
+
         AESEncrypter aes = new AESEncrypter();
-        aes.loadKey(Paths.get("aes_key.txt"), Paths.get("private.txt"), RSAEncrypter.KeyType.PRIVATE);
+        //Act
+        aes.loadKey(Paths.get("aes.key"));
+        //Assert
         Field key = AESEncrypter.class.getDeclaredField("keySpec");
         key.setAccessible(true);
         assertNotNull(key.get(aes));
         
         Field iv = AESEncrypter.class.getDeclaredField("ivSpec");
         iv.setAccessible(true);
-        assertNotNull(key.get(aes));
+        assertNotNull(iv.get(aes));
+        //Clean
+        Files.deleteIfExists(Paths.get("aes.key"));
     }
 
     @Test
@@ -69,18 +76,6 @@ public class AESEncrypterTest {
         aes.generateKey();
         aes.generateIv();
         byte[] cipherBytes = aes.encrypt("Simple text message".getBytes());
-        assertNotNull(cipherBytes);
-    }
-
-    @Test
-    public void testEncrypt_Simple2_withFile() throws Exception {
-        AESEncrypter aes = new AESEncrypter();
-        aes.generateKey();
-        aes.generateIv();
-        aes.saveKey(Paths.get("aes_key.txt"), Paths.get("public.txt"), RSAEncrypter.KeyType.PUBLIC);
-        byte[] cipherBytes = aes.encrypt("Simple text message".getBytes());
-        //write to file
-        FileIO.write(Paths.get("simple.txt"), cipherBytes);
         assertNotNull(cipherBytes);
     }
 }
