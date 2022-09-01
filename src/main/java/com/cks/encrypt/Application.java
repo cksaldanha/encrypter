@@ -76,8 +76,9 @@ public class Application {
     public static void usage() {
         System.out.printf("java encrypter <command> <arguments>\n");
         System.out.printf("\tCommands:\n");
-        System.out.printf("\t\tencrypt [aes key file] [rsa key file] <filename>\n");
-        System.out.printf("\t\tdecrypt <aes key file> <rsa key file> <filename>\n");
-        System.out.printf("\t\trsa [public key file] [private key file]\n");
+        System.out.printf("\t\tencrypt <--mode=aes | rsa> <--keypath=keyFileName> [--type=public | private] <file> [additional files]\n");
+        System.out.printf("\t\tencrypt <--mode=aes | rsa> <--keypath=keyFileName> [--type=public | private] <file> [additional files]\n");
+        System.out.printf("\t\taes [keyFileName]\n");
+        System.out.printf("\t\trsa [--public=keyFileName --private=keyFileName]\n");
     }
 }
