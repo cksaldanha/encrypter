@@ -44,6 +44,15 @@ public class FlagParserTest {
     }
 
     @Test
+    public void testParseKeyValueFlags_multipleKeyValueFlagsWithLineTerminator() {
+        Set<Flag> actual = FlagParser.parseKeyValueFlags("aes --first=first.Values --second=secondValue\n");
+        Set<Flag> expected = new HashSet<>();
+        expected.add(new Flag("first", "first.Values"));
+        expected.add(new Flag("second", "secondValue"));
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testParseKeyOnlyFlags_singleKeyOnlyFlag() {
         Set<Flag> actual = FlagParser.parseKeyOnlyFlags("aes --first");
         Set<Flag> expected = new HashSet<>();
