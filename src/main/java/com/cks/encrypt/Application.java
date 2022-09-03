@@ -32,7 +32,7 @@ public class Application {
     public static void main(String[] args) {
         //setup logging
         ConsoleHandler consHandler = new ConsoleHandler();
-        consHandler.setLevel(Level.ALL);
+        consHandler.setLevel(Level.OFF);
         consHandler.setFormatter(new SimpleFormatter() {
             @Override
             public String format(LogRecord record) {
@@ -51,7 +51,7 @@ public class Application {
             }
         });
         LOGGER.addHandler(consHandler);
-        LOGGER.setLevel(Level.ALL);
+        LOGGER.setLevel(Level.OFF);
         LOGGER.setUseParentHandlers(false);
         LOGGER.info("Application started.");
 
