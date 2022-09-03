@@ -38,7 +38,7 @@ public class FileIO {
     }
 
     public static Path changeFileExtension(Path path, String ext) {
-        StringBuilder sb = new StringBuilder(path.getFileName().toString());
+        StringBuilder sb = new StringBuilder(path.toString());
         sb.delete(sb.lastIndexOf("."), sb.length());
         sb.append(ext);
         return Paths.get(sb.toString());

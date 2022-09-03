@@ -40,4 +40,10 @@ public class FileIOTest {
         Path act = FileIO.changeFileExtension(sample, ".pdf");
         assertEquals("sample.pdf", act.toString());
     }
+    @Test
+    public void testChangeFileExtension_withLinuxFilePaths() {
+        Path sample = Paths.get("/test/file1.txt");
+        Path act = FileIO.changeFileExtension(sample, ".pdf");
+        assertEquals("\\test\\file1.pdf", act.toString()); //automatically switches to backslashes in Windows
+    }
 }
