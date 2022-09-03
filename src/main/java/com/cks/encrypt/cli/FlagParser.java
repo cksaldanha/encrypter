@@ -22,7 +22,7 @@ public class FlagParser {
     private static final Logger LOGGER = Logger.getLogger("com.cks");
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("--(?<key>[\\w-]+)(?==(?<value>[\\w-\\.]+(?=\\s*)))");
     private static final Pattern KEY_ONLY_PATTERN = Pattern.compile("--(?<key>[\\w-]+)(?=\\s)");
-    private static final Pattern NO_KEY_PATTERN = Pattern.compile("(?<=\\s)[\\w]");
+    private static final Pattern NO_KEY_PATTERN = Pattern.compile("(?<=\\s)[^\\s*][^-][^-][.[^\\s]]+(?=\\s)");
 
     public static Set<Flag> parseFlags(String line) {
         Set<Flag> flags = new HashSet<>();
