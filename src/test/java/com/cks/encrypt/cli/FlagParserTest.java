@@ -182,4 +182,16 @@ public class FlagParserTest {
         expected.add(new Flag("files", fileNames));
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testParseFlags_withFlagsAndFilePath() {
+        Set<Flag> actual = FlagParser.parseFlags("encrypt --mode=aes --keypath=/test/aes.key /test/file1.txt");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("/test/file1.txt");
+        expected.add(new Flag("mode", "aes"));
+        expected.add(new Flag("keypath", "/test/aes.key"));
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
 }
