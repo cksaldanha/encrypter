@@ -25,6 +25,7 @@ public class FileIOTest {
         FileIO.write(Paths.get("simple.txt"), "This is a test".getBytes());
         Path path = Paths.get("simple.txt");
         assertTrue(Files.exists(path));
+        Files.deleteIfExists(Paths.get("simple.txt"));
     }
     
     @Test
