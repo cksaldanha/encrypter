@@ -66,6 +66,7 @@ public class DecryptCommand extends EncryptDecryptCommand {
                         );
                         Path decryptPath = FileIO.changeFileExtension(fileNamePath, ".unsecure");
                         FileIO.write(decryptPath, plainBytes);
+                        System.out.println(String.format("File %s has been decrypted.", decryptPath.getFileName().toString()));
                     }
                     break;
 
