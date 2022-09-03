@@ -74,7 +74,7 @@ public class DecryptCommand extends EncryptDecryptCommand {
             }
 
         } catch (IOException x) {
-            System.out.println("Error with I/O for encrypttion.");
+            System.out.println("Error with I/O for encryption.");
             throw new IllegalArgumentException(x);
 
         } catch (GeneralSecurityException x) {
