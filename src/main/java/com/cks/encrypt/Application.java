@@ -62,7 +62,6 @@ public class Application {
                 command.execute();
 
             } catch (Exception x) {
-                x.printStackTrace();
                 System.out.println(x.getMessage());
                 throw new IllegalArgumentException(x);
             }
