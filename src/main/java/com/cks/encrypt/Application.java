@@ -76,7 +76,7 @@ public class Application {
         System.out.printf("java encrypter <command> <arguments>\n");
         System.out.printf("\tCommands:\n");
         System.out.printf("\t\tencrypt <--mode=aes | rsa> <--keypath=keyFileName> [--type=public | private] <file> [additional files]\n");
-        System.out.printf("\t\tencrypt <--mode=aes | rsa> <--keypath=keyFileName> [--type=public | private] <file> [additional files]\n");
+        System.out.printf("\t\tdecrypt <--mode=aes | rsa> <--keypath=keyFileName> [--type=public | private] <file> [additional files]\n");
         System.out.printf("\t\taes [keyFileName]\n");
         System.out.printf("\t\trsa [--public=keyFileName --private=keyFileName]\n");
     }
