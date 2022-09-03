@@ -5,7 +5,9 @@
  */
 package com.cks.encrypt.cli;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.Test;
 
@@ -115,6 +117,69 @@ public class FlagParserTest {
         expected.add(new Flag("second", "secondValue"));
         expected.add(new Flag("third", null));
         expected.add(new Flag("fourth", null));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withSingleFileName() {
+        Set<Flag> actual = FlagParser.parseFlags("aes file1");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withSingleFileNameAndLineTeriminator() {
+        Set<Flag> actual = FlagParser.parseFlags("aes file1\n");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withSingleFileNameAndRandomSpaces() {
+        Set<Flag> actual = FlagParser.parseFlags("aes   file1   ");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withMultipleFileNames() {
+        Set<Flag> actual = FlagParser.parseFlags("encrypt file1 file2");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        fileNames.add("file2");
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withMultipleFileNamesAndLineTerminator() {
+        Set<Flag> actual = FlagParser.parseFlags("encrypt file1 file2\n");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        fileNames.add("file2");
+        expected.add(new Flag("files", fileNames));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParseFlags_withMultipleFileNamesAndRandomSpaces() {
+        Set<Flag> actual = FlagParser.parseFlags("encrypt   file1   file2 \n");
+        Set<Flag> expected = new HashSet<>();
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("file1");
+        fileNames.add("file2");
+        expected.add(new Flag("files", fileNames));
         assertEquals(expected, actual);
     }
 }
