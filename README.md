@@ -11,12 +11,12 @@ Repository includes a Dockerfile to create image directly or you can download th
 [https://hub.docker.com/r/cksaldanha/encrypter](https://hub.docker.com/r/cksaldanha/encrypter)
 
 ## Typical usage
-This will create an aes.key file, which holds the key and initialization vector for encryption using 128-bit AES.
+The following line will create an aes.key file, which can be used for encryption using 128-bit AES.
 ```sh
 java -jar Encrypter-0.0.1-SNAPSHOT.jar aes
 ```
 
-This will create a rsa public/private key pair, with keys stored in the specified filepaths: 'public.key' and 'private.key'
+The following command will create a rsa public/private key pair, with keys stored in the specified filepaths: 'public.key' and 'private.key'
 ```sh
 java -jar Encrypter-0.0.1-SNAPSHOT.jar rsa --public=public.key --private=private.key
 ```
@@ -29,7 +29,12 @@ java -jar Encrypter-0.0.1-SNAPSHOT.jar encrypt --mode=aes --keypath=aes.key file
 This will encrypt the provided files using RSA encryption, with the specified public key. Decryption can only be done
 using the corresponding private key.
 ```sh
-java -jar Encrypter-0.0.1-SNAPSHOT.jar encrypt --mode=rsa --keypath=public.key --type=public [file1] [file2] [file3]
+java -jar Encrypter-0.0.1-SNAPSHOT.jar encrypt --mode=rsa --keypath=public.key --type=public file1 [file2] [file3]
+```
+
+Decrypting a file is similar to encrypting. However, for RSA encryption the opposite key should be used (public for private or vice versa).
+```sh
+java -jar Encrypter-0.0.1-SNAPSHOT.jar decrypt --mode=rsa --keypath=private.key --type=private file1 [file2] [file3]
 ```
 
 ## Docker
