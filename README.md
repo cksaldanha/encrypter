@@ -40,14 +40,14 @@ java -jar Encrypter-0.0.1-SNAPSHOT.jar decrypt --mode=rsa --keypath=private.key 
 ## Docker
 ### AES mode
 ```sh
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 aes /test/my_aes.key
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 encrypt --mode=aes --keypath=/test/my_aes.key file1.txt
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 decrypt --mode=aes --keypath=/test/my_aes.key file1.secure
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 aes /test/my_aes.key
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 encrypt --mode=aes --keypath=/test/my_aes.key file1.txt
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 decrypt --mode=aes --keypath=/test/my_aes.key file1.secure
 ```
 
 ### RSA mode
 ```sh
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 rsa --public=/test/my_public.key --private=/test/my_private.key
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 encrypt --mode=rsa --type=public --keypath=/test/my_public.key file1.txt
-docker run -rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 decrypt --mode=rsa --type=private --keypath=/test/my_private.key file1.secure
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 rsa --public=/test/my_public.key --private=/test/my_private.key
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 encrypt --mode=rsa --type=public --keypath=/test/my_public.key file1.txt
+docker run --rm -ti -v ${pwd}:/test cksaldanha/encrypter:1.0 decrypt --mode=rsa --type=private --keypath=/test/my_private.key file1.secure
 ```
