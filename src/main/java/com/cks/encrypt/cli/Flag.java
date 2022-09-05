@@ -12,12 +12,12 @@ import java.util.Optional;
  *
  * @author colin.saldanha
  */
-public class Flag {
+public class Flag<T> {
 
     private final String key;
-    private final Optional<Object> value;
+    private final Optional<T> value;
 
-    public Flag(String key, Object value) {
+    public Flag(String key, T value) {
         if (key == null || key.equals("")) {
             throw new IllegalArgumentException("Cannot have a null or empty flag key.");
         }
@@ -29,7 +29,7 @@ public class Flag {
         return key;
     }
 
-    public Optional<Object> getValue() {
+    public Optional<T> getValue() {
         return value;
     }
 
@@ -55,6 +55,6 @@ public class Flag {
 
     @Override
     public String toString() {
-        return "Flag[key=" + key + ", value=" + value.orElse("") + "]";
+        return "Flag[key=" + key + ", value=" + (value.isPresent() ? value.get().toString() : "N/A") + "]";
     }
 }
