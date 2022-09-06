@@ -19,13 +19,13 @@ public abstract class Command {
     public static final String CMD_RSA = "rsa";
     public static final String CMD_AES = "aes";
 
-    private Map<String, Flag> flags = new HashMap<>();
+    private Map<String, Flag<?>> flags = new HashMap<>();
 
     public Command() {
     }
 
-    public Command(Flag... flags) {
-        for (Flag flag : flags) {
+    public Command(Flag<?>... flags) {
+        for (Flag<?> flag : flags) {
             if (!validateFlag(flag)) {
                 throw new IllegalArgumentException(String.format("Invalid flag: %s", flag.getKey()));
             }
@@ -37,7 +37,7 @@ public abstract class Command {
         return flags.size();
     }
 
-    public void addFlag(Flag flag) {
+    public void addFlag(Flag<?> flag) {
         if (validateFlag(flag)) {
             flags.put(flag.getKey(), flag);
         }
@@ -47,7 +47,7 @@ public abstract class Command {
         return flags.containsKey(key);
     }
 
-    public Flag getFlag(String key) {
+    public Flag<?> getFlag(String key) {
         if (!flags.containsKey(key)) {
             throw new IllegalArgumentException(String.format("Flag %s is not provided.", key));
         }
@@ -55,7 +55,7 @@ public abstract class Command {
         return flags.get(key);
     }
 
-    abstract boolean validateFlag(Flag flag);
+    abstract boolean validateFlag(Flag<?> flag);
 
     public abstract String getCommand();
 
