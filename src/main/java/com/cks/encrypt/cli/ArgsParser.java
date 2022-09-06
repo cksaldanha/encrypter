@@ -18,20 +18,20 @@ public class ArgsParser {
             throw new IllegalArgumentException();
         }
         String commandLine = getCommandLine(args);
-        Set<Flag> flags = FlagParser.parseFlags(commandLine);
+        Set<Flag<?>> flags = FlagParser.parseFlags(commandLine);
         Command command = null;
         switch (args[0]) {
             case Command.CMD_ENCRYPT:
-                command = new EncryptCommand(flags.stream().toArray(Flag[]::new));
+                command = new EncryptCommand(flags.stream().toArray(Flag<?>[]::new));
                 break;
             case Command.CMD_DECRYPT:
-                command = new DecryptCommand(flags.stream().toArray(Flag[]::new));
+                command = new DecryptCommand(flags.stream().toArray(Flag<?>[]::new));
                 break;
             case Command.CMD_RSA:
-                command = new RSACommand(flags.stream().toArray(Flag[]::new));
+                command = new RSACommand(flags.stream().toArray(Flag<?>[]::new));
                 break;
             case Command.CMD_AES:
-                command = new AESCommand(flags.stream().toArray(Flag[]::new));
+                command = new AESCommand(flags.stream().toArray(Flag<?>[]::new));
                 break;
             default:
                 throw new IllegalArgumentException();
