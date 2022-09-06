@@ -32,7 +32,7 @@ public class RSACommand extends Command {
     public RSACommand() {
     }
 
-    public RSACommand(Flag... flags) {
+    public RSACommand(Flag<?>... flags) {
         super(flags);
     }
 
@@ -71,7 +71,7 @@ public class RSACommand extends Command {
     }
 
     @Override
-    boolean validateFlag(Flag flag) {
+    boolean validateFlag(Flag<?> flag) {
         return VALID_FLAG_KEYS.contains(flag.getKey());
     }
 

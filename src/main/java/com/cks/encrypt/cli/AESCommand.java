@@ -32,7 +32,7 @@ public class AESCommand extends Command {
         super();
     }
 
-    public AESCommand(Flag... flags) {
+    public AESCommand(Flag<?>... flags) {
         super(flags);
     }
 
@@ -70,7 +70,7 @@ public class AESCommand extends Command {
     }
 
     @Override
-    boolean validateFlag(Flag flag) {
+    boolean validateFlag(Flag<?> flag) {
         return VALID_FLAG_KEYS.contains(flag.getKey());
     }
 
