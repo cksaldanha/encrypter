@@ -15,14 +15,14 @@ import java.util.Optional;
 public class Flag<T> {
 
     private final String key;
-    private final Optional<T> value;
+    private final T value;
 
     public Flag(String key, T value) {
         if (key == null || key.equals("")) {
             throw new IllegalArgumentException("Cannot have a null or empty flag key.");
         }
         this.key = key;
-        this.value = Optional.ofNullable(value);
+        this.value = value;
     }
 
     public String getKey() {
@@ -30,7 +30,7 @@ public class Flag<T> {
     }
 
     public Optional<T> getValue() {
-        return value;
+        return Optional.ofNullable(value);
     }
 
     @Override
@@ -55,6 +55,7 @@ public class Flag<T> {
 
     @Override
     public String toString() {
+        Optional<T> value = getValue();
         return "Flag[key=" + key + ", value=" + (value.isPresent() ? value.get().toString() : "N/A") + "]";
     }
 }
