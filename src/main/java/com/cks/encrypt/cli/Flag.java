@@ -14,8 +14,8 @@ import java.util.Optional;
  */
 public abstract class Flag<T> {
 
-    private final String key;
-    private final T value;
+    protected final String key;
+    protected final T value;
 
     public Flag(String key, T value) {
         if (key == null || key.equals("")) {
