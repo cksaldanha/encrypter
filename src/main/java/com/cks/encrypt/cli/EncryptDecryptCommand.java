@@ -29,13 +29,18 @@ public abstract class EncryptDecryptCommand extends Command {
         VALID_FLAG_KEYS.add("files");
     }
 
-    public EncryptDecryptCommand(Flag... flags) {
+    public EncryptDecryptCommand(Flag<?>... flags) {
         super(flags);
-        if (getFlag("mode").equals(EncryptionAlgorithms.RSA)) {
-            if (!containsFlag("type") || !getFlag("type").getValue().isPresent()) {
+        validateRSAFlags();
+    }
+
+    private void validateRSAFlags() {
+        if (this.flags.get("mode").getKey().equals(EncryptionAlgorithms.RSA)) {
+            if (!this.flags.containsKey("type")) {
                 throw new IllegalArgumentException("Must provide type argument with RSA encryption");
             }
-            String type = (String) getFlag("type").getValue().get();
+            KeyValueFlag typeFlag = (KeyValueFlag) this.flags.get("type");
+            String type = typeFlag.getValue().orElseThrow(() -> new IllegalArgumentException("Cannot have null value for type flag"));
             if (!type.equals("public") && !type.equals("private")) {
                 throw new IllegalArgumentException("Invalid type argument for RSA encryption");
             }
@@ -43,7 +48,7 @@ public abstract class EncryptDecryptCommand extends Command {
     }
 
     @Override
-    boolean validateFlag(Flag flag) {
+    boolean validateFlag(Flag<?> flag) {
         return VALID_FLAG_KEYS.contains(flag.getKey());
     }
 
