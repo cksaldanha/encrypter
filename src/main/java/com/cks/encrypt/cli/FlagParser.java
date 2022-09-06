@@ -5,9 +5,8 @@
  */
 package com.cks.encrypt.cli;
 
-import java.util.ArrayList;
+import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -24,28 +23,28 @@ public class FlagParser {
     private static final Pattern KEY_ONLY_PATTERN = Pattern.compile("--(?<key>[\\w-]+)(?=\\s)");
     private static final Pattern NO_KEY_PATTERN = Pattern.compile("(?<=\\s)[^\\s*][^-][^-][.[^\\s]]+(?=\\s)");
 
-    public static Set<Flag> parseFlags(String line) {
-        Set<Flag> flags = new HashSet<>();
+    public static Set<Flag<?>> parseFlags(String line) {
+        Set<Flag<?>> flags = new HashSet<>();
 
-        Set<Flag> keyValueFlags = parseKeyValueFlags(line);
-        Set<Flag> keyOnlyFlags = parseKeyOnlyFlags(line);
-        Flag fileNameFlag = parseFileNamesFlag(line);
+        Set<KeyValueFlag> keyValueFlags = parseKeyValueFlags(line);
+        Set<KeyOnlyFlag> keyOnlyFlags = parseKeyOnlyFlags(line);
+        FilesFlag filesFlag = parseFileNamesFlag(line);
 
-        combineFlags(keyValueFlags, flags);
-        combineFlags(keyOnlyFlags, flags);
-        if (fileNameFlag != null) {
-            flags.add(fileNameFlag);
+        combineFlags(flags, keyValueFlags);
+        combineFlags(flags, keyOnlyFlags);
+        if (filesFlag != null) {
+            flags.add(filesFlag);
         }
 
         return flags;
     }
 
-    private static void combineFlags(Set<Flag> source, Set<Flag> destination) {
-        for (Flag flag : source) {
-            if (destination.contains(flag)) {
+    private static <T extends Flag<?>> void combineFlags(Set<Flag<?>> list, Set<T> additional) {
+        for (Flag<?> flag : additional) {
+            if (list.contains(flag)) {
                 throw new IllegalArgumentException(String.format("Ambigious flag: {%s}", flag.getKey()));
             }
-            destination.add(flag);
+            list.add(flag);
         }
     }
 
@@ -56,37 +55,37 @@ public class FlagParser {
         return line;
     }
 
-    public static Set<Flag> parseKeyValueFlags(String line) {
+    public static Set<KeyValueFlag> parseKeyValueFlags(String line) {
         line = addLineTerminator(line);
         Matcher matcher = KEY_VALUE_PATTERN.matcher(line);
-        Set<Flag> flags = new HashSet<>();
+        Set<KeyValueFlag> flags = new HashSet<>();
         while (matcher.find()) {
             String key = matcher.group("key");
             String value = matcher.group("value");
-            flags.add(new Flag(key, value));
+            flags.add(new KeyValueFlag(key, value));
         }
         return flags;
     }
 
-    public static Set<Flag> parseKeyOnlyFlags(String line) {
+    public static Set<KeyOnlyFlag> parseKeyOnlyFlags(String line) {
         line = addLineTerminator(line);
         Matcher matcher = KEY_ONLY_PATTERN.matcher(line);
-        Set<Flag> flags = new HashSet<>();
+        Set<KeyOnlyFlag> flags = new HashSet<>();
         while (matcher.find()) {
             String key = matcher.group("key");
-            flags.add(new Flag(key, null));
+            flags.add(new KeyOnlyFlag(key));
         }
         return flags;
     }
 
-    public static Flag parseFileNamesFlag(String line) {
+    public static FilesFlag parseFileNamesFlag(String line) {
         line = addLineTerminator(line);
         Matcher matcher = NO_KEY_PATTERN.matcher(line);
-        List<String> fileNames = new ArrayList<>();
+        FilesFlag filesFlag = new FilesFlag();
         while (matcher.find()) {
             String fileName = matcher.group();
-            fileNames.add(fileName);
+            filesFlag.add(Paths.get(fileName));
         }
-        return fileNames.size() > 0 ? new Flag("files", fileNames) : null;
+        return filesFlag.size() > 0 ? filesFlag : null;
     }
 }
