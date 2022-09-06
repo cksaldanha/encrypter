@@ -8,8 +8,6 @@ package com.cks.encrypt.cli;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,28 +33,26 @@ public class DecryptCommandTest {
             writer.write("This is a sample sentence");
         }
 
-        List<String> fileNames = new ArrayList<>();
-        fileNames.add("simple.txt");
-        Flag files = new Flag("files", fileNames);
+        Flag files = new FilesFlag(Paths.get("simple.txt"));
 
         //aes cipher file generation
-        Flag mode = new Flag("mode", "aes");
-        Flag keypath = new Flag("keypath", "aes.key");
+        Flag mode = new KeyValueFlag("mode", "aes");
+        Flag keypath = new KeyValueFlag("keypath", "aes.key");
         EncryptCommand encryptCommand = new EncryptCommand(mode, keypath, files);
         encryptCommand.execute();
         Files.move(Paths.get("simple.secure"), Paths.get("simpleAES.secure"));
 
         //rsa public cipher file generation
-        mode = new Flag("mode", "rsa");
-        keypath = new Flag("keypath", "rsaPublic.key");
-        Flag type = new Flag("type", "public");
+        mode = new KeyValueFlag("mode", "rsa");
+        keypath = new KeyValueFlag("keypath", "rsaPublic.key");
+        Flag type = new KeyValueFlag("type", "public");
         encryptCommand = new EncryptCommand(mode, keypath, type, files);
         encryptCommand.execute();
         Files.move(Paths.get("simple.secure"), Paths.get("simpleRSAPublic.secure"));
 
         //rsa private cipher file generation
-        keypath = new Flag("keypath", "rsaPrivate.key");
-        type = new Flag("type", "private");
+        keypath = new KeyValueFlag("keypath", "rsaPrivate.key");
+        type = new KeyValueFlag("type", "private");
         encryptCommand = new EncryptCommand(mode, keypath, type, files);
         encryptCommand.execute();
         Files.move(Paths.get("simple.secure"), Paths.get("simpleRSAPrivate.secure"));
@@ -85,23 +81,23 @@ public class DecryptCommandTest {
 
     @Test
     public void testGetCommand_withProperAESFlag() {
-        Flag mode = new Flag("mode", "aes");
+        Flag mode = new KeyValueFlag("mode", "aes");
         Command command = new DecryptCommand(new Flag[]{mode});
         assertEquals("decrypt", command.getCommand());
     }
 
     @Test
     public void testGetCommand_withProperRSAFlagsPublic() {
-        Flag mode = new Flag("mode", "rsa");
-        Flag publicFlag = new Flag("type", "public");
+        Flag mode = new KeyValueFlag("mode", "rsa");
+        Flag publicFlag = new KeyValueFlag("type", "public");
         Command command = new DecryptCommand(new Flag[]{mode, publicFlag});
         assertEquals("decrypt", command.getCommand());
     }
 
     @Test
     public void testGetCommand_withProperRSAFlagsPrivate() {
-        Flag mode = new Flag("mode", "rsa");
-        Flag publicFlag = new Flag("type", "private");
+        Flag mode = new KeyValueFlag("mode", "rsa");
+        Flag publicFlag = new KeyValueFlag("type", "private");
         Command command = new DecryptCommand(new Flag[]{mode, publicFlag});
         assertEquals("decrypt", command.getCommand());
     }
@@ -110,11 +106,9 @@ public class DecryptCommandTest {
     public void testExecute_withAESmode() throws Exception {
         //Arrange
         try {
-            Flag mode = new Flag("mode", "aes");
-            Flag keypath = new Flag("keypath", "aes.key");
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("simpleAES.secure");
-            Flag files = new Flag("files", fileNames);
+            Flag mode = new KeyValueFlag("mode", "aes");
+            Flag keypath = new KeyValueFlag("keypath", "aes.key");
+            Flag files = new FilesFlag(Paths.get("simpleAES.secure"));
             Command command = new DecryptCommand(mode, keypath, files);
 
             //Action
@@ -137,12 +131,10 @@ public class DecryptCommandTest {
     public void testExecute_withRSAmodePublic() throws Exception {
         //Arrange
         try {
-            Flag mode = new Flag("mode", "rsa");
-            Flag keypath = new Flag("keypath", "rsaPublic.key");
-            Flag type = new Flag("type", "public");
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("simpleRSAPrivate.secure");
-            Flag files = new Flag("files", fileNames);
+            Flag mode = new KeyValueFlag("mode", "rsa");
+            Flag keypath = new KeyValueFlag("keypath", "rsaPublic.key");
+            Flag type = new KeyValueFlag("type", "public");
+            Flag files = new FilesFlag(Paths.get("simpleRSAPrivate.secure"));
             Command command = new DecryptCommand(mode, keypath, type, files);
 
             //Action
@@ -165,12 +157,10 @@ public class DecryptCommandTest {
     public void testExecute_withRSAmodePrivate() throws Exception {
         //Arrange
         try {
-            Flag mode = new Flag("mode", "rsa");
-            Flag keypath = new Flag("keypath", "rsaPrivate.key");
-            Flag type = new Flag("type", "private");
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("simpleRSAPublic.secure");
-            Flag files = new Flag("files", fileNames);
+            Flag mode = new KeyValueFlag("mode", "rsa");
+            Flag keypath = new KeyValueFlag("keypath", "rsaPrivate.key");
+            Flag type = new KeyValueFlag("type", "private");
+            Flag files = new FilesFlag(Paths.get("simpleRSAPublic.secure"));
             Command command = new DecryptCommand(mode, keypath, type, files);
 
             //Action
