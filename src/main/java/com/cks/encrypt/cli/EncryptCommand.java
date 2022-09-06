@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class EncryptCommand extends EncryptDecryptCommand {
 
-    public EncryptCommand(Flag... flags) {
+    public EncryptCommand(Flag<?>... flags) {
         super(flags);
     }
 
@@ -33,7 +33,7 @@ public class EncryptCommand extends EncryptDecryptCommand {
     @Override
     public void execute() {
         try {
-            String mode = (String) getFlag("mode").getValue().orElseThrow(IllegalArgumentException::new);
+            String mode = ((KeyValueFlag) getFlag("mode")).getValue().orElseThrow(IllegalArgumentException::new);
             Path keyFilePath = getKeyFilePath();
             List<String> fileNames = getFileList();
 
