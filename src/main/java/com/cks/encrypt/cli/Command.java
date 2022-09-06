@@ -19,7 +19,7 @@ public abstract class Command {
     public static final String CMD_RSA = "rsa";
     public static final String CMD_AES = "aes";
 
-    private Map<String, Flag<?>> flags = new HashMap<>();
+    protected Map<String, Flag<?>> flags = new HashMap<>();
 
     public Command() {
     }
