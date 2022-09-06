@@ -53,7 +53,11 @@ public abstract class EncryptDecryptCommand extends Command {
     }
 
     public Path getKeyFilePath() {
-        String keyFile = (String) getFlag("keypath")
+        if (!flags.containsKey("keypath")) {
+            throw new IllegalArgumentException("No keypath flag was specified.");
+        }
+        KeyValueFlag keypathFlag = (KeyValueFlag) flags.get("keypath");
+        String keyFile = keypathFlag
                 .getValue()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid key file path specified."));
         return Paths.get(keyFile);
