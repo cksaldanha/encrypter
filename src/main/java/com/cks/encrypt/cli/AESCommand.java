@@ -8,6 +8,7 @@ package com.cks.encrypt.cli;
 import com.cks.encrypt.encryption.AESEncrypter;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -40,19 +41,20 @@ public class AESCommand extends Command {
     public void execute() {
         try {
             int flagCount = getFlagCount();
-            List<String> fileNames = null;
+            List<Path> filePaths = null;
             if (flagCount > 0) {
-                fileNames = (List<String>) getFlag("files").getValue().orElseThrow(IllegalArgumentException::new);
+                FilesFlag filesFlag = (FilesFlag) getFlag("files");
+                filePaths = filesFlag.getValue().orElseThrow(IllegalArgumentException::new);
             } else {
-                fileNames = new ArrayList<>();
-                fileNames.add("aes.key");
+                filePaths = new ArrayList<>();
+                filePaths.add(Paths.get("aes.key"));
             }
             int count = 0;
-            for (String fileName : fileNames) {
+            for (Path filePath : filePaths) {
                 AESEncrypter aesEncrypter = new AESEncrypter();
                 aesEncrypter.generateKey();
                 aesEncrypter.generateIv();
-                aesEncrypter.savekey(Paths.get(fileName));
+                aesEncrypter.savekey(filePath);
                 count++;
             }
             String msg = String.format("%d AES keys has been generated.\nNOTE: Keys are not encrypted. "
