@@ -32,7 +32,7 @@ public class FilesFlag extends Flag<List<Path>> {
         filePaths.add(filePath);
     }
 
-    public int count() {
+    public int size() {
         List<Path> filePaths = getValue().orElseThrow(() -> new IllegalStateException("Cannot have a null file path list."));
         return filePaths.size();
     }
