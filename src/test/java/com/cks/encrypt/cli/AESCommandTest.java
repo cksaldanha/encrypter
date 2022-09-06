@@ -7,8 +7,6 @@ package com.cks.encrypt.cli;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -21,10 +19,7 @@ public class AESCommandTest {
     @Test
     public void testExecute_whenValidFileNameFlag() throws Exception {
         Command command = new AESCommand();
-        List<String> fileNames = new ArrayList<>();
-        fileNames.add("aes.key");
-        Flag filesFlag = new Flag("files", fileNames);
-        command.addFlag(filesFlag);
+        command.addFlag(new FilesFlag(Paths.get("aes.key")));
         command.execute();
         assertNotNull(Paths.get("aes.key"));
         Files.deleteIfExists(Paths.get("aes.key"));
@@ -33,11 +28,7 @@ public class AESCommandTest {
     @Test
     public void testExecute_whenMultipleFilesSpecified() throws Exception {
         Command command = new AESCommand();
-        List<String> fileNames = new ArrayList<>();
-        fileNames.add("file1");
-        fileNames.add("file2");
-        Flag filesFlag = new Flag("files", fileNames);
-        command.addFlag(filesFlag);
+        command.addFlag(new FilesFlag(Paths.get("file1"), Paths.get("file2")));
         command.execute();
         assertNotNull(Paths.get("file1"));
         assertNotNull(Paths.get("file2"));
