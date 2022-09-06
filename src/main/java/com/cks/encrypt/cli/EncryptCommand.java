@@ -11,7 +11,6 @@ import com.cks.encrypt.encryption.RSAEncrypter;
 import com.cks.encrypt.io.FileIO;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -35,17 +34,16 @@ public class EncryptCommand extends EncryptDecryptCommand {
         try {
             String mode = ((KeyValueFlag) getFlag("mode")).getValue().orElseThrow(IllegalArgumentException::new);
             Path keyFilePath = getKeyFilePath();
-            List<String> fileNames = getFileList();
+            List<Path> filePaths = super.getFilePathList();
 
             switch (mode) {
                 case EncryptionAlgorithms.AES:
                     AESEncrypter aes = new AESEncrypter();
                     aes.loadKey(keyFilePath);
 
-                    for (String fileName : fileNames) {
-                        Path fileNamePath = Paths.get(fileName);
-                        byte[] cipherBytes = aes.encrypt(FileIO.read(fileNamePath));
-                        Path encryptPath = FileIO.changeFileExtension(fileNamePath, ".secure");
+                    for (Path filePath : filePaths) {
+                        byte[] cipherBytes = aes.encrypt(FileIO.read(filePath));
+                        Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
                         FileIO.write(encryptPath, cipherBytes);
                         System.out.println(String.format("File %s has been encrypted.", encryptPath.getFileName().toString()));
                     }
@@ -57,14 +55,13 @@ public class EncryptCommand extends EncryptDecryptCommand {
                             .getValue()
                             .orElseThrow(() -> new IllegalArgumentException("Must provide a type with RSA encryption"));
 
-                    for (String fileName : fileNames) {
-                        Path fileNamePath = Paths.get(fileName);
+                    for (Path filePath : filePaths) {
                         byte[] cipherBytes = rsa.encrypt(
-                                FileIO.read(fileNamePath),
+                                FileIO.read(filePath),
                                 keyFilePath,
                                 type.equals("public") ? RSAEncrypter.KeyType.PUBLIC : RSAEncrypter.KeyType.PRIVATE
                         );
-                        Path encryptPath = FileIO.changeFileExtension(fileNamePath, ".secure");
+                        Path encryptPath = FileIO.changeFileExtension(filePath, ".secure");
                         FileIO.write(encryptPath, cipherBytes);
                         System.out.println(String.format("File %s has been encrypted.", encryptPath.getFileName().toString()));
                     }
