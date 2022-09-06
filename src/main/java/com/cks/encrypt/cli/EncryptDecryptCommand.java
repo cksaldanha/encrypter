@@ -59,10 +59,12 @@ public abstract class EncryptDecryptCommand extends Command {
         return Paths.get(keyFile);
     }
 
-    public List<String> getFileList() {
-        List<String> list = (List<String>) getFlag("files")
-                .getValue()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid file list"));
-        return Collections.unmodifiableList(list);
+    public List<Path> getFilePathList() {
+        if (!flags.containsKey("files")) {
+            throw new IllegalArgumentException("No files flag is available.");
+        }
+        FilesFlag filesFlag = (FilesFlag) flags.get("files");
+        List<Path> filePathList = filesFlag.getValue().orElseThrow(() -> new IllegalArgumentException("Invalid file list supplied"));
+        return Collections.unmodifiableList(filePathList);
     }
 }
