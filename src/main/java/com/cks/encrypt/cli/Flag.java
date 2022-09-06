@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author colin.saldanha
  */
-public class Flag<T> {
+public abstract class Flag<T> {
 
     private final String key;
     private final T value;
