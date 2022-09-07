@@ -19,8 +19,8 @@ public class RSACommandTest {
 
     @Test
     public void testExecute_whenValidFileNameFlagsProvided() throws Exception {
-        Flag publicFlag = new Flag("public", "publicKey");
-        Flag privateFlag = new Flag("private", "privateKey");
+        Flag publicFlag = new KeyValueFlag("public", "publicKey");
+        Flag privateFlag = new KeyValueFlag("private", "privateKey");
         RSACommand command = new RSACommand(publicFlag, privateFlag);
         command.execute();
         assertNotNull(Paths.get("publicKey"));
