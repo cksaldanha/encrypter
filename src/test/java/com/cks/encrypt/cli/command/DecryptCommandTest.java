@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cks.encrypt.cli;
+package com.cks.encrypt.cli.command;
 
+import com.cks.encrypt.cli.command.Command;
+import com.cks.encrypt.cli.command.DecryptCommand;
+import com.cks.encrypt.cli.command.EncryptCommand;
+import com.cks.encrypt.cli.command.AESCommand;
+import com.cks.encrypt.cli.command.RSACommand;
 import com.cks.encrypt.cli.flag.FilesFlag;
 import com.cks.encrypt.cli.flag.KeyValueFlag;
 import com.cks.encrypt.cli.flag.Flag;
