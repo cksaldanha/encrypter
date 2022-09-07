@@ -5,6 +5,9 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.flag.FilesFlag;
+import com.cks.encrypt.cli.flag.KeyValueFlag;
+import com.cks.encrypt.cli.flag.Flag;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;

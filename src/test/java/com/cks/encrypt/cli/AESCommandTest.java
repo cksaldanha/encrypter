@@ -5,6 +5,7 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.flag.FilesFlag;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.Test;
