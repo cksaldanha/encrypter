@@ -8,8 +8,6 @@ package com.cks.encrypt.cli;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -54,23 +52,23 @@ public class EncryptCommandTest {
 
     @Test
     public void testGetCommand_withProperAESFlag() {
-        Flag mode = new Flag("mode", "aes");
+        Flag mode = new KeyValueFlag("mode", "aes");
         Command command = new EncryptCommand(new Flag[]{mode});
         assertEquals("encrypt", command.getCommand());
     }
 
     @Test
     public void testGetCommand_withProperRSAFlagsPublic() {
-        Flag mode = new Flag("mode", "rsa");
-        Flag publicFlag = new Flag("type", "public");
+        Flag mode = new KeyValueFlag("mode", "rsa");
+        Flag publicFlag = new KeyValueFlag("type", "public");
         Command command = new EncryptCommand(new Flag[]{mode, publicFlag});
         assertEquals("encrypt", command.getCommand());
     }
 
     @Test
     public void testGetCommand_withProperRSAFlagsPrivate() {
-        Flag mode = new Flag("mode", "rsa");
-        Flag publicFlag = new Flag("type", "private");
+        Flag mode = new KeyValueFlag("mode", "rsa");
+        Flag publicFlag = new KeyValueFlag("type", "private");
         Command command = new EncryptCommand(new Flag[]{mode, publicFlag});
         assertEquals("encrypt", command.getCommand());
     }
@@ -79,11 +77,9 @@ public class EncryptCommandTest {
     public void testExecute_withAESmode() throws Exception {
         //Arrange
         try {
-            Flag mode = new Flag("mode", "aes");
-            Flag keypath = new Flag("keypath", "aes.key");
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("simple.txt");
-            Flag files = new Flag("files", fileNames);
+            Flag mode = new KeyValueFlag("mode", "aes");
+            Flag keypath = new KeyValueFlag("keypath", "aes.key");
+            Flag files = new FilesFlag(Paths.get("simple.txt"));
             EncryptCommand command = new EncryptCommand(mode, keypath, files);
 
             //Action
@@ -102,12 +98,10 @@ public class EncryptCommandTest {
     public void testExecute_withRSAmode() throws Exception {
         //Arrange
         try {
-            Flag mode = new Flag("mode", "rsa");
-            Flag keypath = new Flag("keypath", "rsaPublic.key");
-            Flag type = new Flag("type", "public");
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("simple.txt");
-            Flag files = new Flag("files", fileNames);
+            Flag mode = new KeyValueFlag("mode", "rsa");
+            Flag keypath = new KeyValueFlag("keypath", "rsaPublic.key");
+            Flag type = new KeyValueFlag("type", "public");
+            Flag files = new FilesFlag(Paths.get("simple.txt"));
             EncryptCommand command = new EncryptCommand(mode, keypath, type, files);
 
             //Action
