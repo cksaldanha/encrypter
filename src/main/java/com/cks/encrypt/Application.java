@@ -6,7 +6,7 @@
 package com.cks.encrypt;
 
 import com.cks.encrypt.cli.ArgsParser;
-import com.cks.encrypt.cli.Command;
+import com.cks.encrypt.cli.command.Command;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

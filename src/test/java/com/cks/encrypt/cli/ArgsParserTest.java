@@ -5,6 +5,7 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.command.Command;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

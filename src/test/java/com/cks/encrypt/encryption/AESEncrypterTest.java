@@ -5,8 +5,8 @@
  */
 package com.cks.encrypt.encryption;
 
-import com.cks.encrypt.cli.AESCommand;
-import com.cks.encrypt.cli.Command;
+import com.cks.encrypt.cli.command.AESCommand;
+import com.cks.encrypt.cli.command.Command;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;

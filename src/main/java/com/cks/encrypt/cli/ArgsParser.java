@@ -5,6 +5,11 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.command.RSACommand;
+import com.cks.encrypt.cli.command.Command;
+import com.cks.encrypt.cli.command.AESCommand;
+import com.cks.encrypt.cli.command.DecryptCommand;
+import com.cks.encrypt.cli.command.EncryptCommand;
 import com.cks.encrypt.cli.flag.FlagParser;
 import com.cks.encrypt.cli.flag.Flag;
 import java.util.Set;
