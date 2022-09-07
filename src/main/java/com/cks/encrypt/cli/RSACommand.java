@@ -5,6 +5,7 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.flag.Flag;
 import com.cks.encrypt.encryption.RSAEncrypter;
 import java.io.IOException;
 import java.nio.file.Paths;

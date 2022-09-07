@@ -5,6 +5,8 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.flag.FilesFlag;
+import com.cks.encrypt.cli.flag.Flag;
 import com.cks.encrypt.encryption.AESEncrypter;
 
 import java.io.IOException;

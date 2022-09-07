@@ -5,6 +5,8 @@
  */
 package com.cks.encrypt.cli;
 
+import com.cks.encrypt.cli.flag.FlagParser;
+import com.cks.encrypt.cli.flag.Flag;
 import java.util.Set;
 
 /**
