@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cks.encrypt.cli;
+package com.cks.encrypt.cli.flag;
 
+import com.cks.encrypt.cli.flag.FilesFlag;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;

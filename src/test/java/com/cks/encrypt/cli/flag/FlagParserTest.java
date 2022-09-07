@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cks.encrypt.cli;
+package com.cks.encrypt.cli.flag;
 
+import com.cks.encrypt.cli.flag.FlagParser;
+import com.cks.encrypt.cli.flag.FilesFlag;
+import com.cks.encrypt.cli.flag.KeyValueFlag;
+import com.cks.encrypt.cli.flag.KeyOnlyFlag;
+import com.cks.encrypt.cli.flag.Flag;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
